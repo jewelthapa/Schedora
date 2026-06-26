@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Schedora — Book trusted local services in seconds</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- NOTE: relative path so you can preview by opening this file directly.
+       Tomorrow we swap this for {{ url_for('static', filename='css/style.css') }} -->
+  <link rel="stylesheet" href="../static/css/style.css" />
+</head>
+<body>
+
+  <!-- ===== NAV ===== -->
+  <header class="nav">
+    <div class="nav__inner">
+      <a class="brand" href="#">
+        <span class="brand__mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" width="28" height="28">
+            <rect x="3" y="6" width="26" height="23" rx="6" fill="none" stroke="currentColor" stroke-width="2.4"/>
+            <line x1="3" y1="13" x2="29" y2="13" stroke="currentColor" stroke-width="2.4"/>
+            <line x1="10" y1="3" x2="10" y2="8" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+            <line x1="22" y1="3" x2="22" y2="8" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+            <path d="M11 21.5l3.2 3.2L22 18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span class="brand__name">Schedora</span>
+      </a>
+
+      <nav class="nav__links" aria-label="Primary">
+        <a href="#how">How it works</a>
+        <a href="#categories">Categories</a>
+        <a href="#roles">For providers</a>
+      </nav>
+
+      <div class="nav__actions">
+        <a class="btn btn--ghost" href="#">Log in</a>
+        <a class="btn btn--solid" href="#">Get started</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <div class="hero__bg" aria-hidden="true"></div>
+
+    <div class="hero__content">
+      <p class="eyebrow">One platform · every appointment</p>
+      <h1 class="hero__title">
+        Find a pro and<br />
+        <span class="hero__title-accent">book the slot</span> in seconds.
+      </h1>
+      <p class="hero__sub">
+        Doctors, salons, tutors, gyms, mechanics and more — discover trusted
+        providers near you, see real-time availability, and lock in your time
+        without the back-and-forth.
+      </p>
+
+      <div class="hero__cta">
+        <a class="btn btn--solid btn--lg" href="#">Browse services</a>
+        <a class="btn btn--outline btn--lg" href="#">Offer your services</a>
+      </div>
+
+      <p class="hero__trust">Free to join · No booking fees · Cancel anytime</p>
+    </div>
+
+    <!-- SIGNATURE: live booking card -->
+    <div class="hero__card" aria-label="Example booking">
+      <div class="bcard">
+        <div class="bcard__head">
+          <div class="bcard__avatar">AR</div>
+          <div>
+            <p class="bcard__name">Aria Rana</p>
+            <p class="bcard__role">Hair Studio · Lazimpat</p>
+          </div>
+          <span class="bcard__rating">★ 4.9</span>
+        </div>
+
+        <p class="bcard__label">Available today</p>
+        <div class="bcard__slots">
+          <button class="slot">09:30</button>
+          <button class="slot slot--taken">10:15</button>
+          <button class="slot slot--active">11:00</button>
+          <button class="slot">13:45</button>
+          <button class="slot slot--taken">15:00</button>
+          <button class="slot">16:30</button>
+        </div>
+
+        <button class="bcard__book">Confirm 11:00 booking</button>
+      </div>
+
+      <div class="hero__chip hero__chip--1">✓ Confirmed instantly</div>
+      <div class="hero__chip hero__chip--2">🔔 Reminder set</div>
+    </div>
+  </section>
+
+  <!-- ===== CATEGORIES ===== -->
+  <section class="categories" id="categories">
+    <div class="section__head">
+      <p class="eyebrow eyebrow--center">Whatever you need booked</p>
+      <h2 class="section__title">Every kind of professional, one place</h2>
+    </div>
+
+    <div class="cat-grid">
+      <div class="cat"><span class="cat__ico">🩺</span>Doctors</div>
+      <div class="cat"><span class="cat__ico">✂️</span>Salons</div>
+      <div class="cat"><span class="cat__ico">📚</span>Tutors</div>
+      <div class="cat"><span class="cat__ico">🏋️</span>Gyms</div>
+      <div class="cat"><span class="cat__ico">📷</span>Photographers</div>
+      <div class="cat"><span class="cat__ico">🔧</span>Mechanics</div>
+      <div class="cat"><span class="cat__ico">⚖️</span>Lawyers</div>
+      <div class="cat"><span class="cat__ico">💪</span>Trainers</div>
+    </div>
+  </section>
+
+  <!-- ===== HOW IT WORKS (a real sequence → numbered) ===== -->
+  <section class="how" id="how">
+    <div class="section__head">
+      <p class="eyebrow eyebrow--center">How it works</p>
+      <h2 class="section__title">From searching to booked in three steps</h2>
+    </div>
+
+    <div class="steps">
+      <article class="step">
+        <span class="step__num">01</span>
+        <h3 class="step__title">Discover</h3>
+        <p class="step__text">Search by category, filter by price, rating and
+          availability, and compare providers near you.</p>
+      </article>
+      <article class="step">
+        <span class="step__num">02</span>
+        <h3 class="step__title">Book</h3>
+        <p class="step__text">Pick an open time slot from a provider's live
+          calendar. No phone calls, no waiting on replies.</p>
+      </article>
+      <article class="step">
+        <span class="step__num">03</span>
+        <h3 class="step__title">Show up</h3>
+        <p class="step__text">Get a confirmation and reminders, manage your
+          bookings, and leave a review afterwards.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== ROLES ===== -->
+  <section class="roles" id="roles">
+    <div class="role role--client">
+      <p class="role__tag">For clients</p>
+      <h3 class="role__title">Booking that respects your time</h3>
+      <ul class="role__list">
+        <li>Real-time slot availability</li>
+        <li>Save favourite providers</li>
+        <li>Track upcoming &amp; past bookings</li>
+        <li>Ratings and reviews you can trust</li>
+      </ul>
+      <a class="btn btn--solid" href="#">Find a service</a>
+    </div>
+
+    <div class="role role--provider">
+      <p class="role__tag role__tag--light">For providers</p>
+      <h3 class="role__title">Fill your calendar, not your inbox</h3>
+      <ul class="role__list">
+        <li>Publish services and set your prices</li>
+        <li>Open and manage your own time slots</li>
+        <li>Accept or decline requests in a tap</li>
+        <li>See bookings and earnings at a glance</li>
+      </ul>
+      <a class="btn btn--solid" href="#">Start offering</a>
+    </div>
+  </section>
+
+  <!-- ===== CTA BAND ===== -->
+  <section class="cta-band">
+    <h2 class="cta-band__title">Your next appointment is a few taps away.</h2>
+    <p class="cta-band__sub">Join Schedora and book trusted local services today.</p>
+    <a class="btn btn--solid btn--lg" href="#">Create your free account</a>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="footer__inner">
+      <div class="footer__brand">
+        <span class="brand__name brand__name--light">Schedora</span>
+        <p class="footer__tag">All-in-one appointment &amp; service booking.</p>
+      </div>
+      <div class="footer__cols">
+        <div>
+          <p class="footer__h">Product</p>
+          <a href="#">Browse</a><a href="#">Categories</a><a href="#">Pricing</a>
+        </div>
+        <div>
+          <p class="footer__h">Company</p>
+          <a href="#">About</a><a href="#">Careers</a><a href="#">Contact</a>
+        </div>
+        <div>
+          <p class="footer__h">Legal</p>
+          <a href="#">Privacy</a><a href="#">Terms</a>
+        </div>
+      </div>
+    </div>
+    <p class="footer__copy">© 2026 Schedora. Built as a web technologies project.</p>
+  </footer>
+
+</body>
+</html>
