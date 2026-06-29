@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Create your account · Schedora{% endblock %}
+
+{% block content %}
+<section class="auth">
+  <div class="auth__card">
+    <h1 class="auth__title">Create your account</h1>
+    <p class="auth__sub">Join Schedora as a client or a provider.</p>
+
+    <form method="POST" action="{{ url_for('auth.register') }}" class="auth__form">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+      <label class="field">
+        <span class="field__label">Full name</span>
+        <input type="text" name="name" value="{{ name or '' }}" required>
+      </label>
+
+      <label class="field">
+        <span class="field__label">Email</span>
+        <input type="email" name="email" value="{{ email or '' }}" required>
+      </label>
+
+      <label class="field">
+        <span class="field__label">Password</span>
+        <input type="password" name="password" minlength="6" required>
+      </label>
+
+      <div class="field">
+        <span class="field__label">I want to…</span>
+        <div class="role-choice">
+          <label class="role-opt">
+            <input type="radio" name="role" value="client"
+                   {% if role != 'provider' %}checked{% endif %}>
+            <span>Book services</span>
+          </label>
+          <label class="role-opt">
+            <input type="radio" name="role" value="provider"
+                   {% if role == 'provider' %}checked{% endif %}>
+            <span>Offer services</span>
+          </label>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn--solid btn--lg auth__submit">Create account</button>
+    </form>
+
+    <p class="auth__alt">Already have an account?
+      <a href="{{ url_for('auth.login') }}">Log in</a></p>
+  </div>
+</section>
+{% endblock %}
