@@ -72,8 +72,8 @@ def create_app():
     #   Registered here as we build each feature. Commented out until
     #   the matching routes file exists, so the app still boots.
     # ----------------------------------------------------------------
-    # from app.routes.authRoutes import auth_bp
-    # app.register_blueprint(auth_bp)
+    from app.routes.authRoutes import auth_bp
+    app.register_blueprint(auth_bp)
 
     # ----------------------------------------------------------------
     # ERROR HANDLERS
