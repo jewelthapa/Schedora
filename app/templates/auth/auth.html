@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block title %}
+  {% if start == 'signup' %}Sign up{% else %}Log in{% endif %} · Schedora
+{% endblock %}
+
+{% block content %}
+<section class="auth-wrap">
+  <div class="auth-container {% if start == 'signup' %}right-active{% endif %}" id="authContainer">
+
+    <!-- LOG IN FORM -->
+    <div class="auth-form-box auth-form-box--signin">
+      <form method="POST" action="{{ url_for('auth.login') }}" class="auth-inner">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <h1 class="auth-h1">Log in</h1>
+        <p class="auth-sub">Welcome back to Schedora.</p>
+
+        <input class="auth-input" type="email" name="email"
+               placeholder="Email address" value="{{ email or '' }}" required>
+        <input class="auth-input" type="password" name="password"
+               placeholder="Password" required>
+
+        <button type="submit" class="auth-submit">Log in</button>
+      </form>
+    </div>
+
+    <!-- SIGN UP FORM -->
+    <div class="auth-form-box auth-form-box--signup">
+      <form method="POST" action="{{ url_for('auth.register') }}" class="auth-inner">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <h1 class="auth-h1">Sign up</h1>
+        <p class="auth-sub">Join Schedora as a client or provider.</p>
+
+        <input class="auth-input" type="text" name="name"
+               placeholder="Full name" value="{{ name or '' }}" required>
+        <input class="auth-input" type="email" name="email"
+               placeholder="Email address" value="{{ email or '' }}" required>
+        <input class="auth-input" type="password" name="password"
+               placeholder="Password (6+ characters)" minlength="6" required>
+
+        <div class="auth-role">
+          <label class="auth-role__opt">
+            <input type="radio" name="role" value="client"
+                   {% if role != 'provider' %}checked{% endif %}>
+            <span>Book services</span>
+          </label>
+          <label class="auth-role__opt">
+            <input type="radio" name="role" value="provider"
+                   {% if role == 'provider' %}checked{% endif %}>
+            <span>Offer services</span>
+          </label>
+        </div>
+
+        <button type="submit" class="auth-submit">Create account</button>
+      </form>
+    </div>
+
+    <!-- SLIDING OVERLAY -->
+    <div class="auth-overlay-box">
+      <div class="auth-overlay">
+
+        <div class="auth-overlay-panel auth-overlay-panel--left">
+          <div>
+            <h2 class="auth-ov-title">Welcome back</h2>
+            <p class="auth-ov-text">To keep connected with your bookings, log in with your account.</p>
+            <button type="button" class="auth-ghost" id="goSignIn">Log in</button>
+          </div>
+        </div>
+
+        <div class="auth-overlay-panel auth-overlay-panel--right">
+          <div>
+            <h2 class="auth-ov-title">New here?</h2>
+            <p class="auth-ov-text">Start booking or offering services. Join Schedora in seconds.</p>
+            <button type="button" class="auth-ghost" id="goSignUp">Sign up</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+  (function () {
+    var c = document.getElementById('authContainer');
+    var up = document.getElementById('goSignUp');
+    var inb = document.getElementById('goSignIn');
+    if (up) up.addEventListener('click', function () { c.classList.add('right-active'); });
+    if (inb) inb.addEventListener('click', function () { c.classList.remove('right-active'); });
+  })();
+</script>
+{% endblock %}

@@ -26,7 +26,7 @@ def register():
             for e in errors:
                 flash(e, "danger")
             # Re-render with the values they already typed (except password)
-            return render_template("auth/register.html", name=name, email=email, role=role)
+            return render_template("auth/auth.html", start="signup", name=name, email=email, role=role)
 
         conn = get_connection()
         try:
@@ -35,7 +35,7 @@ def register():
                 cursor.execute("SELECT id FROM users WHERE email = %s", (email,))
                 if cursor.fetchone():
                     flash("An account with that email already exists.", "danger")
-                    return render_template("auth/register.html", name=name, email=email, role=role)
+                    return render_template("auth/auth.html", start="signup", name=name, email=email, role=role)
 
                 # Hash the password before storing it (never store plaintext)
                 hashed = generate_password_hash(password)
@@ -51,8 +51,9 @@ def register():
         finally:
             conn.close()
 
-    # GET request → just show the empty form
-    return render_template("auth/register.html")
+    # GET request → show the sign-up side of the panel
+    return render_template("auth/auth.html", start="signup")
+
 
 def login():
     """Handle login (GET shows form, POST verifies credentials)."""
@@ -62,7 +63,7 @@ def login():
 
         if not email or not password:
             flash("Please enter both email and password.", "danger")
-            return render_template("auth/login.html", email=email)
+            return render_template("auth/auth.html", start="signin", email=email)
 
         conn = get_connection()
         try:
@@ -80,7 +81,7 @@ def login():
         # tell whether an email is registered.
         if user is None or not check_password_hash(user["password"], password):
             flash("Invalid email or password.", "danger")
-            return render_template("auth/login.html", email=email)
+            return render_template("auth/auth.html", start="signin", email=email)
 
         # Credentials valid → start the session
         session.clear()
@@ -91,7 +92,8 @@ def login():
         flash(f"Welcome back, {user['name']}!", "success")
         return redirect(url_for("home"))
 
-    return render_template("auth/login.html")
+    # GET request → show the sign-in side of the panel
+    return render_template("auth/auth.html", start="signin")
 
 
 def logout():
