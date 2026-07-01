@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="dash-shell">
+
+  <aside class="dash-side" aria-label="Dashboard navigation">
+    <div class="dash-side__panel">
+
+      <div class="dash-side__brand">
+        <span class="dash-side__brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="17" rx="4"/>
+            <line x1="3" y1="9" x2="21" y2="9"/>
+            <line x1="8" y1="2" x2="8" y2="6"/>
+            <line x1="16" y1="2" x2="16" y2="6"/>
+          </svg>
+        </span>
+        <span class="dash-side__brand-name">Schedora</span>
+      </div>
+
+      <nav class="dash-side__nav" aria-label="Main">
+        {% if current_user.role == 'provider' %}
+          <a class="dash-side__link {% if active == 'dashboard' %}active{% endif %}" href="{{ url_for('dashboard.dashboard') }}">
+            <span class="dash-side__ico">▦</span> Dashboard
+          </a>
+          <a class="dash-side__link {% if active == 'services' %}active{% endif %}" href="#">
+            <span class="dash-side__ico">📋</span> My services
+          </a>
+          <a class="dash-side__link {% if active == 'slots' %}active{% endif %}" href="#">
+            <span class="dash-side__ico">🕒</span> Availability
+          </a>
+          <a class="dash-side__link {% if active == 'bookings' %}active{% endif %}" href="#">
+            <span class="dash-side__ico">📥</span> Bookings
+          </a>
+          <a class="dash-side__link {% if active == 'reviews' %}active{% endif %}" href="#">
+            <span class="dash-side__ico">⭐</span> Reviews
+          </a>
+        {% else %}
+          <a class="dash-side__link {% if active == 'dashboard' %}active{% endif %}" href="{{ url_for('dashboard.dashboard') }}">
+            <span class="dash-side__ico">▦</span> Dashboard
+          </a>
+          <a class="dash-side__link {% if active == 'browse' %}active{% endif %}" href="#">
+            <span class="dash-side__ico">🔍</span> Browse
+          </a>
+          <a class="dash-side__link {% if active == 'bookings' %}active{% endif %}" href="#">
+            <span class="dash-side__ico">📅</span> My bookings
+          </a>
+          <a class="dash-side__link {% if active == 'favorites' %}active{% endif %}" href="#">
+            <span class="dash-side__ico">⭐</span> Favourites
+          </a>
+        {% endif %}
+      </nav>
+
+      <a class="dash-side__logout" href="{{ url_for('auth.logout') }}">
+        <span class="dash-side__ico">↪</span> Log out
+      </a>
+
+    </div>
+  </aside>
+
+  <main class="dash-main">
+    {% block dash_content %}{% endblock %}
+  </main>
+
+</div>
+{% endblock %}

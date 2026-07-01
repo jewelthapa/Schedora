@@ -1,0 +1,59 @@
+{% extends "dash_base.html" %}
+{% block title %}Dashboard · Schedora{% endblock %}
+
+{% set active = 'dashboard' %}
+
+{% block dash_content %}
+<header class="dash-head">
+  <div>
+    <p class="dash-head__eyebrow">Client dashboard</p>
+    <h1 class="dash-head__title">Welcome back, {{ user.name }}</h1>
+    <p class="dash-head__sub">Browse services, manage bookings, and keep track of favourites.</p>
+  </div>
+</header>
+
+<div class="dash-stats">
+  <div class="stat">
+    <span class="stat__label">Upcoming</span>
+    <span class="stat__value">{{ stats.upcoming|default(0) }}</span>
+    <span class="stat__hint">Confirmed bookings</span>
+  </div>
+  <div class="stat">
+    <span class="stat__label">Pending</span>
+    <span class="stat__value">{{ stats.pending|default(0) }}</span>
+    <span class="stat__hint">Awaiting provider response</span>
+  </div>
+  <div class="stat">
+    <span class="stat__label">Completed</span>
+    <span class="stat__value">{{ stats.completed|default(0) }}</span>
+    <span class="stat__hint">Past appointments</span>
+  </div>
+  <div class="stat">
+    <span class="stat__label">Favourites</span>
+    <span class="stat__value">{{ stats.favorites|default(0) }}</span>
+    <span class="stat__hint">Saved providers</span>
+  </div>
+</div>
+
+<section class="dash-section">
+  <h2 class="dash-section__title">Recent activity</h2>
+  {% if recent_bookings and recent_bookings|length > 0 %}
+    <ul class="activity">
+      {% for b in recent_bookings %}
+        <li class="activity__row">
+          <span class="activity__dot activity__dot--{{ b.status }}"></span>
+          <span class="activity__main">{{ b.service_title }} <span class="activity__meta">with {{ b.provider_name }}</span></span>
+          <span class="activity__side">{{ b.slot_date }} · {{ b.start_time }}</span>
+          <span class="activity__status">{{ b.status }}</span>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <div class="empty">
+      <p class="empty__title">No bookings yet</p>
+      <p class="empty__text">Browse services to make your first appointment.</p>
+      <a class="btn btn--solid" href="#">Browse services</a>
+    </div>
+  {% endif %}
+</section>
+{% endblock %}

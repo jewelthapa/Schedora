@@ -17,7 +17,7 @@
       <button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle theme"></button>
       {% if current_user %}
         <span class="nav__hello">Hi, {{ current_user.name }}</span>
-        <a class="btn btn--ghost" href="{{ url_for('auth.logout') }}">Log out</a>
+        <a class="btn btn--solid" href="{{ url_for('dashboard.dashboard') }}">Dashboard</a>
       {% else %}
         <a class="btn btn--ghost" href="{{ url_for('auth.login') }}">Log in</a>
         <a class="btn btn--solid" href="{{ url_for('auth.register') }}">Get started</a>

@@ -1,0 +1,59 @@
+{% extends "dash_base.html" %}
+{% block title %}Dashboard · Schedora{% endblock %}
+
+{% set active = 'dashboard' %}
+
+{% block dash_content %}
+<header class="dash-head">
+  <div>
+    <p class="dash-head__eyebrow">Provider dashboard</p>
+    <h1 class="dash-head__title">Welcome back, {{ user.name }}</h1>
+    <p class="dash-head__sub">Manage services, availability, and incoming bookings.</p>
+  </div>
+</header>
+
+<div class="dash-stats">
+  <div class="stat">
+    <span class="stat__label">Pending requests</span>
+    <span class="stat__value">{{ stats.pending|default(0) }}</span>
+    <span class="stat__hint">Awaiting your response</span>
+  </div>
+  <div class="stat">
+    <span class="stat__label">Confirmed</span>
+    <span class="stat__value">{{ stats.confirmed|default(0) }}</span>
+    <span class="stat__hint">Upcoming appointments</span>
+  </div>
+  <div class="stat">
+    <span class="stat__label">Active services</span>
+    <span class="stat__value">{{ stats.services|default(0) }}</span>
+    <span class="stat__hint">Listings live</span>
+  </div>
+  <div class="stat">
+    <span class="stat__label">Open slots</span>
+    <span class="stat__value">{{ stats.open_slots|default(0) }}</span>
+    <span class="stat__hint">Currently bookable</span>
+  </div>
+</div>
+
+<section class="dash-section">
+  <h2 class="dash-section__title">Incoming bookings</h2>
+  {% if recent_bookings and recent_bookings|length > 0 %}
+    <ul class="activity">
+      {% for b in recent_bookings %}
+        <li class="activity__row">
+          <span class="activity__dot activity__dot--{{ b.status }}"></span>
+          <span class="activity__main">{{ b.client_name }} <span class="activity__meta">booked {{ b.service_title }}</span></span>
+          <span class="activity__side">{{ b.slot_date }} · {{ b.start_time }}</span>
+          <span class="activity__status">{{ b.status }}</span>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <div class="empty">
+      <p class="empty__title">No bookings yet</p>
+      <p class="empty__text">Add services and open some time slots so clients can book you.</p>
+      <a class="btn btn--solid" href="#">Add a service</a>
+    </div>
+  {% endif %}
+</section>
+{% endblock %}
