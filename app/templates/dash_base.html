@@ -39,7 +39,7 @@
               <span class="notif-badge">{{ unread_notifications }}</span>
             {% endif %}
           </a>
-          <a class="dash-side__link {% if active == 'services' %}active{% endif %}" href="#" data-tooltip="My services">
+          <a class="dash-side__link {% if active == 'services' %}active{% endif %}" href="{{ url_for('service.myServices') }}" data-tooltip="My services">
             <span class="dash-side__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7h-9M14 17H5M17 17a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg></span>
             <span class="link-label">My services</span>
           </a>

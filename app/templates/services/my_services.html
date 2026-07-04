@@ -1,0 +1,51 @@
+{% extends "dash_base.html" %}
+{% block title %}My services · Schedora{% endblock %}
+
+{% set active = 'services' %}
+
+{% block dash_content %}
+<header class="dash-head">
+  <div class="dash-head__row">
+    <div>
+      <p class="dash-head__eyebrow">Provider</p>
+      <h1 class="dash-head__title">My services</h1>
+      <p class="dash-head__sub">Add, edit, and remove the services you offer to clients.</p>
+    </div>
+    <a class="btn btn--solid" href="{{ url_for('service.createService') }}">Add a service</a>
+  </div>
+</header>
+
+<section class="dash-section">
+  {% if services %}
+    <ul class="svc-list">
+      {% for s in services %}
+        <li class="svc">
+          <div class="svc__body">
+            <div class="svc__head">
+              <span class="svc__cat">{{ s.category }}</span>
+              <span class="svc__price">Rs. {{ '%.2f'|format(s.price) }}</span>
+            </div>
+            <h3 class="svc__title">{{ s.title }}</h3>
+            {% if s.description %}<p class="svc__desc">{{ s.description }}</p>{% endif %}
+            <p class="svc__meta">Added {{ s.created_at.strftime('%d %b %Y') if s.created_at else '' }}</p>
+          </div>
+          <div class="svc__actions">
+            <a class="btn btn--ghost" href="{{ url_for('service.editService', service_id=s.id) }}">Edit</a>
+            <form method="POST" action="{{ url_for('service.deleteService', service_id=s.id) }}"
+                  onsubmit="return confirm('Delete this service? Any time slots linked to it will also be removed.');">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+              <button type="submit" class="btn btn--ghost svc__delete">Delete</button>
+            </form>
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <div class="empty">
+      <p class="empty__title">No services yet</p>
+      <p class="empty__text">Add your first service so clients can start booking you.</p>
+      <a class="btn btn--solid" href="{{ url_for('service.createService') }}">Add your first service</a>
+    </div>
+  {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,68 @@
+{% extends "dash_base.html" %}
+{% block title %}
+  {% if mode == 'edit' %}Edit service{% else %}Add service{% endif %} · Schedora
+{% endblock %}
+
+{% set active = 'services' %}
+
+{% block dash_content %}
+<header class="dash-head">
+  <div>
+    <p class="dash-head__eyebrow">Provider</p>
+    <h1 class="dash-head__title">
+      {% if mode == 'edit' %}Edit service{% else %}Add a service{% endif %}
+    </h1>
+    <p class="dash-head__sub">
+      {% if mode == 'edit' %}
+        Update the details clients see when they browse.
+      {% else %}
+        Describe what you offer. You'll open time slots for this service in the next step.
+      {% endif %}
+    </p>
+  </div>
+</header>
+
+<section class="dash-section">
+  <form method="POST"
+        action="{% if mode == 'edit' %}{{ url_for('service.editService', service_id=service.id) }}{% else %}{{ url_for('service.createService') }}{% endif %}"
+        class="profile-form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+    <div class="pfield">
+      <label class="pfield__label" for="title">Title</label>
+      <input class="pfield__input" id="title" name="title" type="text"
+             value="{{ service.title if service else '' }}" required minlength="3">
+    </div>
+
+    <div class="pfield">
+      <label class="pfield__label" for="category">Category</label>
+      <select class="pfield__input" id="category" name="category" required>
+        <option value="" disabled {% if not service %}selected{% endif %}>Choose a category</option>
+        {% for c in categories %}
+          <option value="{{ c }}" {% if service and service.category == c %}selected{% endif %}>{{ c }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="pfield">
+      <label class="pfield__label" for="price">Price (Rs.)</label>
+      <input class="pfield__input" id="price" name="price" type="number"
+             step="0.01" min="0"
+             value="{{ '%.2f'|format(service.price) if service else '' }}" required>
+    </div>
+
+    <div class="pfield">
+      <label class="pfield__label" for="description">Description (optional)</label>
+      <textarea class="pfield__input pfield__input--area" id="description"
+                name="description" rows="4">{{ service.description if service else '' }}</textarea>
+    </div>
+
+    <div class="profile-form__actions">
+      <a class="btn btn--ghost" href="{{ url_for('service.myServices') }}">Cancel</a>
+      <button type="submit" class="btn btn--solid">
+        {% if mode == 'edit' %}Save changes{% else %}Create service{% endif %}
+      </button>
+    </div>
+  </form>
+</section>
+{% endblock %}
