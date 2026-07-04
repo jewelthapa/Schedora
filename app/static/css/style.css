@@ -1405,3 +1405,114 @@ section { padding: 96px 24px; }
   padding-top: 18px;
   border-top: 1px solid var(--line);
 }
+
+/* =====================================================================
+   NOTIFICATIONS
+   ===================================================================== */
+
+/* Sidebar unread badge */
+.notif-badge {
+  margin-left: auto;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  display: inline-grid;
+  place-items: center;
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #ffffff;
+  background: #d97070;
+  border-radius: 999px;
+  line-height: 1;
+}
+[data-theme="dark"] .notif-badge { background: #e58a8a; color: #1c1c1c; }
+
+/* When sidebar is collapsed, badge becomes a floating dot on the icon */
+.dash-shell.collapsed .notif-badge {
+  position: absolute;
+  top: 6px;
+  right: 12px;
+  margin: 0;
+  min-width: 8px;
+  height: 8px;
+  padding: 0;
+  font-size: 0;
+}
+
+/* Header row (title + Mark all button) */
+.dash-head__row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+/* Notification list */
+.notif-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.notif {
+  display: grid;
+  grid-template-columns: 14px 1fr auto;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--bg-surface);
+  transition: border-color 0.15s ease;
+}
+.notif:hover { border-color: var(--mint); }
+.notif--unread {
+  background: color-mix(in srgb, var(--sage) 40%, var(--bg-surface));
+  border-color: rgba(22, 160, 133, 0.25);
+}
+[data-theme="dark"] .notif--unread {
+  background: rgba(45, 191, 161, 0.08);
+  border-color: rgba(45, 191, 161, 0.22);
+}
+
+.notif__dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--muted);
+}
+.notif__dot--info    { background: var(--teal); }
+.notif__dot--success { background: #6ec38a; }
+.notif__dot--warning { background: #efb44a; }
+.notif__dot--danger  { background: #d97070; }
+
+.notif__body { min-width: 0; }
+.notif__msg {
+  font-family: var(--font-body);
+  color: var(--text-strong);
+  font-size: 0.94rem;
+  margin: 0;
+}
+.notif--unread .notif__msg { font-weight: 600; }
+.notif__time {
+  font-family: var(--font-body);
+  color: var(--muted);
+  font-size: 0.8rem;
+  margin: 2px 0 0;
+}
+
+.notif__actions { display: flex; gap: 8px; }
+.notif__btn {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.78rem;
+  padding: 6px 12px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--text-strong);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.notif__btn:hover { border-color: var(--teal); color: var(--teal); }
+.notif__btn--danger:hover { border-color: #d97070; color: #d97070; }

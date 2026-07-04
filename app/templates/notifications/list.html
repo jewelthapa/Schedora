@@ -1,0 +1,57 @@
+{% extends "dash_base.html" %}
+{% block title %}Notifications · Schedora{% endblock %}
+
+{% set active = 'notifications' %}
+
+{% block dash_content %}
+<header class="dash-head">
+  <div class="dash-head__row">
+    <div>
+      <p class="dash-head__eyebrow">Notifications</p>
+      <h1 class="dash-head__title">Your notifications</h1>
+      <p class="dash-head__sub">Booking updates, review reminders, and account activity.</p>
+    </div>
+    {% if items and items|selectattr('is_read', 'equalto', 0)|list %}
+      <form method="POST" action="{{ url_for('notification.markAllRead') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <button type="submit" class="btn btn--outline">Mark all as read</button>
+      </form>
+    {% endif %}
+  </div>
+</header>
+
+<section class="dash-section">
+  {% if items %}
+    <ul class="notif-list">
+      {% for n in items %}
+        <li class="notif {% if not n.is_read %}notif--unread{% endif %}">
+          <span class="notif__dot notif__dot--{{ n.type }}"></span>
+          <div class="notif__body">
+            <p class="notif__msg">{{ n.message }}</p>
+            <p class="notif__time">{{ n.created_at.strftime('%d %b %Y, %H:%M') if n.created_at else '' }}</p>
+          </div>
+          <div class="notif__actions">
+            {% if not n.is_read %}
+              <form method="POST" action="{{ url_for('notification.markRead', notification_id=n.id) }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <button type="submit" class="notif__btn">Mark read</button>
+              </form>
+            {% endif %}
+            <form method="POST" action="{{ url_for('notification.deleteOne', notification_id=n.id) }}"
+                  onsubmit="return confirm('Delete this notification?');">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+              <button type="submit" class="notif__btn notif__btn--danger">Delete</button>
+            </form>
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <div class="empty">
+      <p class="empty__title">No notifications yet</p>
+      <p class="empty__text">When you get booking updates or account activity, they'll show up here.</p>
+      <a class="btn btn--solid" href="{{ url_for('notification.createTest') }}">Create a test notification</a>
+    </div>
+  {% endif %}
+</section>
+{% endblock %}

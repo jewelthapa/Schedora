@@ -55,9 +55,16 @@ def create_app():
     # ----------------------------------------------------------------
     @app.context_processor
     def inject_globals():
+        unread = 0
+        cu = g.get("current_user")
+        if cu is not None:
+            # Import here to avoid circular import at app startup
+            from app.repository import notification_repo
+            unread = notification_repo.count_unread(cu["id"])
         return {
-            "current_user": g.get("current_user"),
+            "current_user": cu,
             "csrf_token": session.get("csrf_token"),
+            "unread_notifications": unread,
         }
 
     # ----------------------------------------------------------------
@@ -77,6 +84,9 @@ def create_app():
 
     from app.routes.dashboardRoutes import dashboard_bp
     app.register_blueprint(dashboard_bp)
+
+    from app.routes.notificationRoutes import notification_bp
+    app.register_blueprint(notification_bp)
 
     from app.routes.profileRoutes import profile_bp
     app.register_blueprint(profile_bp)
