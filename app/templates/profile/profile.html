@@ -1,0 +1,47 @@
+{% extends "dash_base.html" %}
+{% block title %}Profile · Schedora{% endblock %}
+
+{% set active = 'profile' %}
+
+{% block dash_content %}
+<header class="dash-head">
+  <div>
+    <p class="dash-head__eyebrow">Account</p>
+    <h1 class="dash-head__title">Profile</h1>
+    <p class="dash-head__sub">Your account details and public information.</p>
+  </div>
+</header>
+
+<section class="dash-section">
+  <div class="profile-view">
+    <div class="profile-view__row">
+      <span class="profile-view__label">Name</span>
+      <span class="profile-view__value">{{ user.name }}</span>
+    </div>
+    <div class="profile-view__row">
+      <span class="profile-view__label">Email</span>
+      <span class="profile-view__value">{{ user.email }}</span>
+    </div>
+    <div class="profile-view__row">
+      <span class="profile-view__label">Role</span>
+      <span class="profile-view__value profile-view__badge">{{ user.role|capitalize }}</span>
+    </div>
+    <div class="profile-view__row">
+      <span class="profile-view__label">Phone</span>
+      <span class="profile-view__value">{{ user.phone or '—' }}</span>
+    </div>
+    <div class="profile-view__row">
+      <span class="profile-view__label">Bio</span>
+      <span class="profile-view__value">{{ user.bio or '—' }}</span>
+    </div>
+    <div class="profile-view__row">
+      <span class="profile-view__label">Member since</span>
+      <span class="profile-view__value">{{ user.created_at.strftime('%d %b %Y') if user.created_at else '—' }}</span>
+    </div>
+  </div>
+
+  <div class="profile-actions">
+    <a class="btn btn--solid" href="{{ url_for('profile.edit') }}">Edit profile</a>
+  </div>
+</section>
+{% endblock %}

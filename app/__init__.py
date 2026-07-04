@@ -78,6 +78,9 @@ def create_app():
     from app.routes.dashboardRoutes import dashboard_bp
     app.register_blueprint(dashboard_bp)
 
+    from app.routes.profileRoutes import profile_bp
+    app.register_blueprint(profile_bp)
+
     # ----------------------------------------------------------------
     # ERROR HANDLERS
     # ----------------------------------------------------------------

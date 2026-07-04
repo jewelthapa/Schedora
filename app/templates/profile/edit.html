@@ -1,0 +1,68 @@
+{% extends "dash_base.html" %}
+{% block title %}Edit profile · Schedora{% endblock %}
+
+{% set active = 'profile' %}
+
+{% block dash_content %}
+<header class="dash-head">
+  <div>
+    <p class="dash-head__eyebrow">Account</p>
+    <h1 class="dash-head__title">Edit profile</h1>
+    <p class="dash-head__sub">Update your details. Your current password confirms any change.</p>
+  </div>
+</header>
+
+<section class="dash-section">
+  <form method="POST" action="{{ url_for('profile.edit') }}" class="profile-form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+    <div class="pfield">
+      <label class="pfield__label" for="name">Full name</label>
+      <input class="pfield__input" id="name" name="name" type="text"
+             value="{{ user.name }}" required>
+    </div>
+
+    <div class="pfield">
+      <label class="pfield__label" for="email">Email address</label>
+      <input class="pfield__input" id="email" name="email" type="email"
+             value="{{ user.email }}" required>
+    </div>
+
+    <div class="pfield">
+      <label class="pfield__label" for="phone">Phone (optional)</label>
+      <input class="pfield__input" id="phone" name="phone" type="tel"
+             value="{{ user.phone or '' }}">
+    </div>
+
+    <div class="pfield">
+      <label class="pfield__label" for="bio">Bio (optional)</label>
+      <textarea class="pfield__input pfield__input--area" id="bio" name="bio"
+                rows="3">{{ user.bio or '' }}</textarea>
+    </div>
+
+    <div class="pfield-group">
+      <h3 class="pfield-group__title">Change password</h3>
+      <p class="pfield-group__hint">Leave the new password blank to keep your current one.</p>
+
+      <div class="pfield">
+        <label class="pfield__label" for="new_password">New password</label>
+        <input class="pfield__input" id="new_password" name="new_password"
+               type="password" minlength="6" placeholder="At least 6 characters">
+      </div>
+    </div>
+
+    <div class="pfield">
+      <label class="pfield__label" for="current_password">
+        Current password <span class="pfield__req">(required to save changes)</span>
+      </label>
+      <input class="pfield__input" id="current_password" name="current_password"
+             type="password" required>
+    </div>
+
+    <div class="profile-form__actions">
+      <a class="btn btn--ghost" href="{{ url_for('profile.profile') }}">Cancel</a>
+      <button type="submit" class="btn btn--solid">Save changes</button>
+    </div>
+  </form>
+</section>
+{% endblock %}
