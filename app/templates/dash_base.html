@@ -84,6 +84,11 @@
             <span class="link-label">Favourites</span>
           </a>
         {% endif %}
+
+          <a class="dash-side__link {% if active == 'help' %}active{% endif %}" href="{{ url_for('help.help') }}" data-tooltip="Help">
+            <span class="dash-side__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
+            <span class="link-label">Help</span>
+          </a>
       </nav>
 
       <a class="dash-side__logout" href="{{ url_for('auth.logout') }}" data-tooltip="Log out">

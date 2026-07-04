@@ -1,0 +1,113 @@
+{% extends "dash_base.html" %}
+{% block title %}Help · Schedora{% endblock %}
+
+{% set active = 'help' %}
+
+{% block dash_content %}
+<header class="dash-head">
+  <div>
+    <p class="dash-head__eyebrow">Support</p>
+    <h1 class="dash-head__title">Help & FAQ</h1>
+    <p class="dash-head__sub">Quick answers to the questions people ask most. Can't find yours? Reach out below.</p>
+  </div>
+</header>
+
+<section class="dash-section help-block">
+  <h2 class="help-block__title">Getting started</h2>
+
+  <details class="faq">
+    <summary class="faq__q">What can I do on Schedora?</summary>
+    <div class="faq__a">
+      <p>Schedora is a booking platform for local services — doctors, salons, tutors, gyms, mechanics, and more. Clients can browse providers and book appointments; providers can list services and manage their availability.</p>
+    </div>
+  </details>
+
+  <details class="faq">
+    <summary class="faq__q">How do I switch between client and provider?</summary>
+    <div class="faq__a">
+      <p>Each account is either a client or a provider. If you want to do both, create a second account with a different email.</p>
+    </div>
+  </details>
+
+  <details class="faq">
+    <summary class="faq__q">How is my password stored?</summary>
+    <div class="faq__a">
+      <p>Passwords are never stored in plain text. Schedora uses the scrypt hashing algorithm with a unique per-user salt, so even identical passwords look completely different in the database.</p>
+    </div>
+  </details>
+</section>
+
+<section class="dash-section help-block">
+  <h2 class="help-block__title">For clients</h2>
+
+  <details class="faq">
+    <summary class="faq__q">How do I book an appointment?</summary>
+    <div class="faq__a">
+      <p>Head to <strong>Browse</strong>, pick a service, choose an open time slot, and confirm. You'll get a notification once the provider accepts.</p>
+    </div>
+  </details>
+
+  <details class="faq">
+    <summary class="faq__q">Can I cancel a booking?</summary>
+    <div class="faq__a">
+      <p>Yes. Open <strong>My bookings</strong>, find the appointment, and click Cancel. The slot becomes available again for other clients.</p>
+    </div>
+  </details>
+
+  <details class="faq">
+    <summary class="faq__q">Do I need to pay through Schedora?</summary>
+    <div class="faq__a">
+      <p>No. Schedora handles bookings only. Payment happens directly with the provider at your appointment.</p>
+    </div>
+  </details>
+</section>
+
+<section class="dash-section help-block">
+  <h2 class="help-block__title">For providers</h2>
+
+  <details class="faq">
+    <summary class="faq__q">How do I list a service?</summary>
+    <div class="faq__a">
+      <p>Go to <strong>My services</strong> and add a new listing with a title, description, category, and price. It becomes visible to clients right away.</p>
+    </div>
+  </details>
+
+  <details class="faq">
+    <summary class="faq__q">How do I open time slots?</summary>
+    <div class="faq__a">
+      <p>Under <strong>Availability</strong>, add the dates and times you're free. Each slot is tied to one service and becomes bookable immediately.</p>
+    </div>
+  </details>
+
+  <details class="faq">
+    <summary class="faq__q">Can I reject a booking?</summary>
+    <div class="faq__a">
+      <p>Yes. When a client books one of your slots, it starts as pending. You can accept or reject it from <strong>Bookings</strong>. Rejected slots free up automatically.</p>
+    </div>
+  </details>
+</section>
+
+<section class="dash-section help-block">
+  <h2 class="help-block__title">Account &amp; security</h2>
+
+  <details class="faq">
+    <summary class="faq__q">How do I change my password?</summary>
+    <div class="faq__a">
+      <p>Open <strong>Profile</strong> → <strong>Edit profile</strong>. Enter a new password and confirm with your current one.</p>
+    </div>
+  </details>
+
+  <details class="faq">
+    <summary class="faq__q">How do I delete my account?</summary>
+    <div class="faq__a">
+      <p>Account deletion isn't self-serve yet. For now, contact support and we'll remove it for you along with all your bookings and reviews.</p>
+    </div>
+  </details>
+</section>
+
+<section class="dash-section help-block help-contact">
+  <h2 class="help-block__title">Still stuck?</h2>
+  <p class="help-contact__text">Drop us a line and we'll get back to you within a working day.</p>
+  <a class="btn btn--solid" href="mailto:support@schedora.local">Email support</a>
+</section>
+{% endblock %}
