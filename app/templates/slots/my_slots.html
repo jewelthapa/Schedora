@@ -1,0 +1,64 @@
+{% extends "dash_base.html" %}
+{% block title %}Availability · Schedora{% endblock %}
+
+{% set active = 'slots' %}
+
+{% block dash_content %}
+<header class="dash-head">
+  <div class="dash-head__row">
+    <div>
+      <p class="dash-head__eyebrow">Provider</p>
+      <h1 class="dash-head__title">Availability</h1>
+      <p class="dash-head__sub">Open time slots so clients can book you. Each slot is tied to a service you offer.</p>
+    </div>
+    <a class="btn btn--solid" href="{{ url_for('slot.createSlot') }}">Add a slot</a>
+  </div>
+</header>
+
+<section class="dash-section">
+  {% if slots %}
+    <ul class="slot-list">
+      {% for t in slots %}
+        <li class="slotrow {% if t.is_booked %}slotrow--booked{% endif %}">
+          <div class="slotrow__body">
+            <div class="slotrow__head">
+              <span class="slotrow__service">{{ t.service_title }}</span>
+              {% if t.is_booked %}
+                <span class="status-pill status-pill--booked">Booked</span>
+              {% else %}
+                <span class="status-pill status-pill--open">Open</span>
+              {% endif %}
+            </div>
+            <p class="slotrow__when">
+              {{ t.slot_date.strftime('%a %d %b %Y') }}
+              &nbsp;·&nbsp;
+              {{ t.start_time|string|truncate(5, True, '') }}
+              &nbsp;–&nbsp;
+              {{ t.end_time|string|truncate(5, True, '') }}
+            </p>
+          </div>
+          <div class="slotrow__actions">
+            {% if not t.is_booked %}
+              <a class="btn btn--ghost" href="{{ url_for('slot.editSlot', slot_id=t.id) }}">Edit</a>
+              <form method="POST"
+                    action="{{ url_for('slot.deleteSlot', slot_id=t.id) }}"
+                    onsubmit="return confirm('Delete this time slot?');">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <button type="submit" class="btn btn--ghost svc__delete">Delete</button>
+              </form>
+            {% else %}
+              <span class="slotrow__locked">Locked</span>
+            {% endif %}
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <div class="empty">
+      <p class="empty__title">No slots yet</p>
+      <p class="empty__text">Open your first time slot so clients can request an appointment.</p>
+      <a class="btn btn--solid" href="{{ url_for('slot.createSlot') }}">Add your first slot</a>
+    </div>
+  {% endif %}
+</section>
+{% endblock %}

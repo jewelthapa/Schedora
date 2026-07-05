@@ -97,6 +97,9 @@ def create_app():
     from app.routes.serviceRoutes import service_bp
     app.register_blueprint(service_bp)
 
+    from app.routes.slotRoutes import slot_bp
+    app.register_blueprint(slot_bp)
+
     # ----------------------------------------------------------------
     # ERROR HANDLERS
     # ----------------------------------------------------------------

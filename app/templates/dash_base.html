@@ -43,7 +43,7 @@
             <span class="dash-side__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7h-9M14 17H5M17 17a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg></span>
             <span class="link-label">My services</span>
           </a>
-          <a class="dash-side__link {% if active == 'slots' %}active{% endif %}" href="#" data-tooltip="Availability">
+          <a class="dash-side__link {% if active == 'slots' %}active{% endif %}" href="{{ url_for('slot.mySlots') }}" data-tooltip="Availability">
             <span class="dash-side__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
             <span class="link-label">Availability</span>
           </a>
@@ -54,6 +54,10 @@
           <a class="dash-side__link {% if active == 'reviews' %}active{% endif %}" href="#" data-tooltip="Reviews">
             <span class="dash-side__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
             <span class="link-label">Reviews</span>
+          </a>
+          <a class="dash-side__link {% if active == 'help' %}active{% endif %}" href="{{ url_for('help.help') }}" data-tooltip="Help">
+            <span class="dash-side__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
+            <span class="link-label">Help</span>
           </a>
         {% else %}
           <a class="dash-side__link {% if active == 'dashboard' %}active{% endif %}" href="{{ url_for('dashboard.dashboard') }}" data-tooltip="Dashboard">
@@ -83,12 +87,11 @@
             <span class="dash-side__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
             <span class="link-label">Favourites</span>
           </a>
-        {% endif %}
-
           <a class="dash-side__link {% if active == 'help' %}active{% endif %}" href="{{ url_for('help.help') }}" data-tooltip="Help">
             <span class="dash-side__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
             <span class="link-label">Help</span>
           </a>
+        {% endif %}
       </nav>
 
       <a class="dash-side__logout" href="{{ url_for('auth.logout') }}" data-tooltip="Log out">

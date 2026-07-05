@@ -1,0 +1,69 @@
+{% extends "dash_base.html" %}
+{% block title %}
+  {% if mode == 'edit' %}Edit slot{% else %}Add slot{% endif %} · Schedora
+{% endblock %}
+
+{% set active = 'slots' %}
+
+{% block dash_content %}
+<header class="dash-head">
+  <div>
+    <p class="dash-head__eyebrow">Provider</p>
+    <h1 class="dash-head__title">
+      {% if mode == 'edit' %}Edit time slot{% else %}Add a time slot{% endif %}
+    </h1>
+    <p class="dash-head__sub">
+      Slots are shown on the service page for clients to book.
+    </p>
+  </div>
+</header>
+
+<section class="dash-section">
+  <form method="POST"
+        action="{% if mode == 'edit' %}{{ url_for('slot.editSlot', slot_id=slot.id) }}{% else %}{{ url_for('slot.createSlot') }}{% endif %}"
+        class="profile-form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    {% if mode == 'edit' %}
+      <input type="hidden" name="editing_id" value="{{ slot.id }}">
+    {% endif %}
+
+    <div class="pfield">
+      <label class="pfield__label" for="service_id">Service</label>
+      <select class="pfield__input" id="service_id" name="service_id" required>
+        <option value="" disabled {% if not slot %}selected{% endif %}>Choose a service</option>
+        {% for s in services %}
+          <option value="{{ s.id }}" {% if slot and slot.service_id == s.id %}selected{% endif %}>
+            {{ s.title }}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="pfield">
+      <label class="pfield__label" for="slot_date">Date</label>
+      <input class="pfield__input" id="slot_date" name="slot_date" type="date"
+             value="{{ slot.slot_date.isoformat() if slot and slot.slot_date else '' }}" required>
+    </div>
+
+    <div class="pfield-row">
+      <div class="pfield">
+        <label class="pfield__label" for="start_time">Start time</label>
+        <input class="pfield__input" id="start_time" name="start_time" type="time"
+               value="{{ slot.start_time|string|truncate(5, True, '') if slot and slot.start_time else '' }}" required>
+      </div>
+      <div class="pfield">
+        <label class="pfield__label" for="end_time">End time</label>
+        <input class="pfield__input" id="end_time" name="end_time" type="time"
+               value="{{ slot.end_time|string|truncate(5, True, '') if slot and slot.end_time else '' }}" required>
+      </div>
+    </div>
+
+    <div class="profile-form__actions">
+      <a class="btn btn--ghost" href="{{ url_for('slot.mySlots') }}">Cancel</a>
+      <button type="submit" class="btn btn--solid">
+        {% if mode == 'edit' %}Save changes{% else %}Add slot{% endif %}
+      </button>
+    </div>
+  </form>
+</section>
+{% endblock %}
