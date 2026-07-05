@@ -52,11 +52,10 @@
                 {{ t.start_time|string|truncate(5, True, '') }} – {{ t.end_time|string|truncate(5, True, '') }}
               </p>
             </div>
-            <button type="button" class="btn btn--solid" disabled title="Booking coming soon">Book</button>
+            <a href="{{ url_for('booking.createBooking', slot_id=t.id) }}" class="btn btn--solid">Book</a>
           </li>
         {% endfor %}
       </ul>
-      <p class="detail-slots__note">Booking will be enabled shortly — we're finalising the flow.</p>
     {% else %}
       <div class="empty">
         <p class="empty__title">No open slots right now</p>

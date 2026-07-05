@@ -2070,3 +2070,125 @@ section { padding: 96px 24px; }
   color: #f4a89a;
   background: rgba(210, 100, 85, 0.18);
 }
+/* =====================================================================
+   BOOKING CONFIRMATION
+   ===================================================================== */
+
+.confirm-card {
+  max-width: 640px;
+}
+.confirm-row {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 16px;
+  align-items: start;
+  padding: 14px 4px;
+  border-bottom: 1px solid var(--line);
+}
+.confirm-row:last-of-type { border-bottom: none; }
+
+.confirm-row__label {
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding-top: 2px;
+}
+.confirm-row__value {
+  font-family: var(--font-body);
+  color: var(--text-strong);
+  font-size: 0.98rem;
+}
+.confirm-row__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  margin: 6px 0 0;
+}
+.confirm-row__price {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.confirm-note {
+  margin: 22px 0 24px;
+  padding: 14px 16px;
+  border-left: 3px solid var(--teal);
+  background: var(--bg-field);
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  border-radius: 0 8px 8px 0;
+}
+.confirm-note strong { color: var(--text-strong); }
+
+.confirm-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 8px;
+}
+
+/* =====================================================================
+   MY BOOKINGS
+   ===================================================================== */
+
+.mb-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.mb-card {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: start;
+  gap: 20px;
+  padding: 20px 22px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--bg-surface);
+  transition: border-color 0.15s ease;
+}
+.mb-card:hover { border-color: var(--mint); }
+
+.mb-card__head {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.mb-card__title {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-strong);
+  margin: 0 0 4px;
+}
+.mb-card__meta {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin: 0 0 8px;
+}
+.mb-card__when {
+  color: var(--text-strong);
+  font-size: 0.94rem;
+  font-weight: 500;
+  margin: 0 0 6px;
+}
+.mb-card__price {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--text-strong);
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.mb-card__actions form { margin: 0; }
+.mb-cancel:hover { color: #d97070; border-color: #d97070; }
+
+@media (max-width: 600px) {
+  .mb-card { grid-template-columns: 1fr; }
+}
