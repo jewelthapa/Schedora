@@ -90,7 +90,7 @@ def login():
         session["user_role"] = user["role"]
 
         flash(f"Welcome back, {user['name']}!", "success")
-        return redirect(url_for("home"))
+        return redirect(url_for("dashboard.dashboard"))
 
     # GET request → show the sign-in side of the panel
     return render_template("auth/auth.html", start="signin")

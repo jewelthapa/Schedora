@@ -2192,3 +2192,26 @@ section { padding: 96px 24px; }
 @media (max-width: 600px) {
   .mb-card { grid-template-columns: 1fr; }
 }
+/* Two side-by-side action buttons (accept + reject) */
+.mb-card__actions--two {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 120px;
+}
+.mb-card__actions--two form { width: 100%; }
+.mb-card__actions--two .btn { width: 100%; }
+
+.mb-accept {
+  background: var(--teal);
+  color: #ffffff;
+}
+.mb-accept:hover { background: var(--teal-dark); }
+
+@media (max-width: 600px) {
+  .mb-card__actions--two {
+    flex-direction: row;
+    width: 100%;
+    min-width: 0;
+  }
+}
