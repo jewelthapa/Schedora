@@ -100,6 +100,9 @@ def create_app():
     from app.routes.slotRoutes import slot_bp
     app.register_blueprint(slot_bp)
 
+    from app.routes.browseRoutes import browse_bp
+    app.register_blueprint(browse_bp)
+
     # ----------------------------------------------------------------
     # ERROR HANDLERS
     # ----------------------------------------------------------------

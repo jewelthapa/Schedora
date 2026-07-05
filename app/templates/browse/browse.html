@@ -1,0 +1,79 @@
+{% extends "dash_base.html" %}
+{% block title %}Browse services · Schedora{% endblock %}
+
+{% set active = 'browse' %}
+
+{% block dash_content %}
+<header class="dash-head">
+  <div>
+    <p class="dash-head__eyebrow">Discover</p>
+    <h1 class="dash-head__title">Browse services</h1>
+    <p class="dash-head__sub">Find a provider by category or search by keyword.</p>
+  </div>
+</header>
+
+<section class="dash-section browse-filters">
+  <form method="GET" action="{{ url_for('browse.browse') }}" class="browse-search">
+    <input class="pfield__input browse-search__input" type="search"
+           name="q" placeholder="Search by service title or description..."
+           value="{{ search_term or '' }}">
+    {% if active_category %}
+      <input type="hidden" name="category" value="{{ active_category }}">
+    {% endif %}
+    <button type="submit" class="btn btn--solid">Search</button>
+  </form>
+
+  <div class="browse-cats">
+    <a href="{{ url_for('browse.browse') }}"
+       class="browse-cat {% if not active_category %}browse-cat--active{% endif %}">All</a>
+    {% for c in categories %}
+      <a href="{{ url_for('browse.browse', category=c) }}"
+         class="browse-cat {% if active_category == c %}browse-cat--active{% endif %}">{{ c }}</a>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="dash-section">
+  {% if services %}
+    <p class="browse-count">{{ services|length }} service{{ 's' if services|length != 1 else '' }} found</p>
+    <ul class="browse-list">
+      {% for s in services %}
+        <li class="browse-card">
+          <a href="{{ url_for('browse.detail', service_id=s.id) }}" class="browse-card__link">
+            <div class="browse-card__head">
+              <span class="svc__cat svc__cat--{{ s.category|lower }}">{{ s.category }}</span>
+              <span class="browse-card__price">Rs. {{ '%.2f'|format(s.price) }}</span>
+            </div>
+            <h3 class="browse-card__title">{{ s.title }}</h3>
+            {% if s.description %}
+              <p class="browse-card__desc">{{ s.description|truncate(120, True, '...') }}</p>
+            {% endif %}
+            <div class="browse-card__foot">
+              <span class="browse-card__provider">by {{ s.provider_name }}</span>
+              {% if s.open_slots > 0 %}
+                <span class="status-pill status-pill--open">{{ s.open_slots }} slot{{ 's' if s.open_slots != 1 else '' }}</span>
+              {% else %}
+                <span class="status-pill status-pill--completed">No slots</span>
+              {% endif %}
+            </div>
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <div class="empty">
+      <p class="empty__title">No services found</p>
+      <p class="empty__text">
+        {% if search_term or active_category %}
+          Try clearing your filters or searching for something else.
+        {% else %}
+          No services have been listed yet.
+        {% endif %}
+      </p>
+      {% if search_term or active_category %}
+        <a class="btn btn--solid" href="{{ url_for('browse.browse') }}">Clear filters</a>
+      {% endif %}
+    </div>
+  {% endif %}
+</section>
+{% endblock %}

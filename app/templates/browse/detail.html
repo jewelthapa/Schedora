@@ -1,0 +1,69 @@
+{% extends "dash_base.html" %}
+{% block title %}{{ service.title }} · Schedora{% endblock %}
+
+{% set active = 'browse' %}
+
+{% block dash_content %}
+<header class="dash-head">
+  <div>
+    <p class="dash-head__eyebrow">
+      <a href="{{ url_for('browse.browse') }}" class="detail-back">← Back to browse</a>
+    </p>
+    <h1 class="dash-head__title">{{ service.title }}</h1>
+    <p class="dash-head__sub">Offered by {{ service.provider_name }}</p>
+  </div>
+</header>
+
+<div class="detail-grid">
+
+  <!-- Left: service info -->
+  <section class="dash-section detail-info">
+    <div class="detail-meta">
+      <span class="svc__cat svc__cat--{{ service.category|lower }}">{{ service.category }}</span>
+      <span class="detail-price">Rs. {{ '%.2f'|format(service.price) }}</span>
+    </div>
+
+    <h2 class="detail-h2">About this service</h2>
+    <p class="detail-text">{{ service.description or 'No description provided.' }}</p>
+
+    <h2 class="detail-h2">About the provider</h2>
+    <div class="detail-provider">
+      <div class="detail-provider__avatar">{{ service.provider_name[0]|upper }}</div>
+      <div>
+        <p class="detail-provider__name">{{ service.provider_name }}</p>
+        {% if service.provider_bio %}
+          <p class="detail-provider__bio">{{ service.provider_bio }}</p>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+
+  <!-- Right: slots -->
+  <section class="dash-section detail-slots">
+    <h2 class="detail-h2">Available time slots</h2>
+
+    {% if slots %}
+      <ul class="detail-slot-list">
+        {% for t in slots %}
+          <li class="detail-slot">
+            <div class="detail-slot__body">
+              <p class="detail-slot__date">{{ t.slot_date.strftime('%a, %d %b') }}</p>
+              <p class="detail-slot__time">
+                {{ t.start_time|string|truncate(5, True, '') }} – {{ t.end_time|string|truncate(5, True, '') }}
+              </p>
+            </div>
+            <button type="button" class="btn btn--solid" disabled title="Booking coming soon">Book</button>
+          </li>
+        {% endfor %}
+      </ul>
+      <p class="detail-slots__note">Booking will be enabled shortly — we're finalising the flow.</p>
+    {% else %}
+      <div class="empty">
+        <p class="empty__title">No open slots right now</p>
+        <p class="empty__text">Check back soon — this provider will add availability.</p>
+      </div>
+    {% endif %}
+  </section>
+
+</div>
+{% endblock %}

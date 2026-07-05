@@ -1754,3 +1754,319 @@ section { padding: 96px 24px; }
 .status-dot--rejected,
 .status-dot--cancelled { background: #d97070; }
 .status-dot--completed { background: #94a3b8; }
+
+/* =====================================================================
+   BROWSE + SERVICE DETAIL
+   ===================================================================== */
+
+.browse-filters {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.browse-search {
+  display: flex;
+  gap: 10px;
+}
+.browse-search__input { flex: 1; }
+
+.browse-cats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.browse-cat {
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 7px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  transition: all 0.15s ease;
+}
+.browse-cat:hover { border-color: var(--teal); color: var(--teal); }
+.browse-cat--active {
+  background: var(--teal);
+  color: #ffffff;
+  border-color: var(--teal);
+}
+.browse-cat--active:hover { background: var(--teal-dark); color: #ffffff; }
+
+.browse-count {
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  color: var(--muted);
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.browse-list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 14px;
+}
+.browse-card {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--bg-surface);
+  transition: border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+}
+.browse-card:hover {
+  border-color: var(--mint);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-sm);
+}
+.browse-card__link {
+  display: block;
+  padding: 18px 20px;
+  color: inherit;
+}
+.browse-card__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  gap: 10px;
+}
+.browse-card__price {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--text-strong);
+}
+.browse-card__title {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-strong);
+  margin: 0 0 8px;
+}
+.browse-card__desc {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin: 0 0 12px;
+  line-height: 1.5;
+}
+.browse-card__foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+}
+.browse-card__provider {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+/* ---------- Service detail ---------- */
+.detail-back {
+  color: var(--teal);
+  text-transform: none;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+.detail-back:hover { text-decoration: underline; }
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .detail-grid { grid-template-columns: 1fr; }
+}
+
+.detail-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+  gap: 12px;
+}
+.detail-price {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: var(--text-strong);
+}
+
+.detail-h2 {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-strong);
+  margin: 20px 0 10px;
+}
+.detail-h2:first-of-type { margin-top: 0; }
+.detail-text {
+  color: var(--muted);
+  font-size: 0.94rem;
+  line-height: 1.6;
+}
+
+.detail-provider {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 14px;
+  background: var(--bg-field);
+  border-radius: 12px;
+  border: 1px solid var(--line);
+}
+.detail-provider__avatar {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--teal), var(--teal-deep));
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.detail-provider__name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--text-strong);
+  margin: 0 0 4px;
+}
+.detail-provider__bio {
+  color: var(--muted);
+  font-size: 0.88rem;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.detail-slot-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.detail-slot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--bg-surface);
+}
+.detail-slot__date {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--text-strong);
+  font-size: 0.92rem;
+  margin: 0;
+}
+.detail-slot__time {
+  color: var(--muted);
+  font-size: 0.86rem;
+  margin: 2px 0 0;
+}
+.detail-slot .btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.detail-slots__note {
+  margin-top: 14px;
+  font-size: 0.82rem;
+  color: var(--muted);
+  text-align: center;
+  font-style: italic;
+}
+/* =====================================================================
+   CATEGORY COLOR CODES
+   ===================================================================== */
+
+/* Base pill inherits everything from .svc__cat; these overrides just
+   swap the background + text color per category. */
+
+/* Doctors — soft blue */
+.svc__cat--doctors {
+  color: #1e4c7a;
+  background: #deebf7;
+}
+[data-theme="dark"] .svc__cat--doctors {
+  color: #8ec4ee;
+  background: rgba(66, 133, 200, 0.18);
+}
+
+/* Salons — soft pink */
+.svc__cat--salons {
+  color: #9c2a5a;
+  background: #fce4ef;
+}
+[data-theme="dark"] .svc__cat--salons {
+  color: #f0a5c8;
+  background: rgba(220, 100, 160, 0.18);
+}
+
+/* Tutors — soft purple */
+.svc__cat--tutors {
+  color: #5e3c8a;
+  background: #ede7f6;
+}
+[data-theme="dark"] .svc__cat--tutors {
+  color: #c8b4ee;
+  background: rgba(149, 117, 205, 0.18);
+}
+
+/* Gyms — soft orange */
+.svc__cat--gyms {
+  color: #a5470f;
+  background: #fdead0;
+}
+[data-theme="dark"] .svc__cat--gyms {
+  color: #f4b880;
+  background: rgba(210, 120, 40, 0.18);
+}
+
+/* Photographers — soft teal-gray */
+.svc__cat--photographers {
+  color: #2a5a5c;
+  background: #d6ebe9;
+}
+[data-theme="dark"] .svc__cat--photographers {
+  color: #9edad2;
+  background: rgba(75, 155, 155, 0.18);
+}
+
+/* Mechanics — soft slate */
+.svc__cat--mechanics {
+  color: #364a5c;
+  background: #dfe6ed;
+}
+[data-theme="dark"] .svc__cat--mechanics {
+  color: #b9c9d8;
+  background: rgba(100, 130, 165, 0.18);
+}
+
+/* Lawyers — soft brown */
+.svc__cat--lawyers {
+  color: #6b421d;
+  background: #f0e2d2;
+}
+[data-theme="dark"] .svc__cat--lawyers {
+  color: #d8b28a;
+  background: rgba(170, 120, 70, 0.18);
+}
+
+/* Trainers — soft coral */
+.svc__cat--trainers {
+  color: #a53a2a;
+  background: #fce0d8;
+}
+[data-theme="dark"] .svc__cat--trainers {
+  color: #f4a89a;
+  background: rgba(210, 100, 85, 0.18);
+}
