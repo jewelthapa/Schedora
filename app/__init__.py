@@ -11,6 +11,22 @@ def create_app():
     # Load configuration (SECRET_KEY, MySQL creds, session settings) from Config
     app.config.from_object(Config)
 
+    # ----------------------------------------------------------------
+    # SESSION EXPIRY
+    # ----------------------------------------------------------------
+    # Sessions expire after 30 minutes of inactivity (sliding).
+    # Every request resets the timer as long as the user is active.
+    from datetime import timedelta
+    app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(minutes=30)
+    app.config["SESSION_REFRESH_EACH_REQUEST"] = True
+
+    @app.before_request
+    def make_session_permanent():
+        """Mark session as permanent so PERMANENT_SESSION_LIFETIME applies.
+        This is required — Flask sessions default to browser-lifetime otherwise."""
+        from flask import session
+        session.permanent = True
+
     # Fail loudly if the secret key wasn't loaded from .env
     if not app.config.get("SECRET_KEY"):
         raise RuntimeError("SECRET_KEY is not set. Check your .env file.")
