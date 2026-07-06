@@ -1,3 +1,7 @@
+import base64
+import io
+
+import qrcode
 from datetime import date
 
 from flask import render_template, request, redirect, url_for, flash, g, abort
@@ -195,3 +199,69 @@ def _get_bookable_slot_or_404(slot_id):
     if row["is_booked"]:
         abort(404)  # treat already-booked as "not available"
     return row
+
+@login_required
+@role_required("client")
+def bookingTicket(booking_id):
+    """Show the QR ticket for an accepted booking.
+    Only the booking's owner can view it (IDOR protection).
+    Only accepted bookings have tickets."""
+    conn = get_connection()
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute(
+                """SELECT b.id, b.status,
+                          s.title AS service_title,
+                          c.name  AS client_name,
+                          p.name  AS provider_name,
+                          t.slot_date, t.start_time, t.end_time
+                   FROM bookings b
+                   JOIN services   s ON s.id = b.service_id
+                   JOIN users      c ON c.id = b.client_id
+                   JOIN users      p ON p.id = b.provider_id
+                   JOIN time_slots t ON t.id = b.time_slot_id
+                   WHERE b.id = %s AND b.client_id = %s""",
+                (booking_id, g.current_user["id"]),
+            )
+            booking = cursor.fetchone()
+    finally:
+        conn.close()
+
+    if booking is None:
+        abort(404)
+
+    if booking["status"] != "accepted":
+        flash("Tickets are only available for accepted bookings.", "warning")
+        return redirect(url_for("booking.myBookings"))
+
+    # Build a plain-text ticket string
+    ticket_text = (
+        f"Schedora Booking #{booking['id']}\n"
+        f"Service: {booking['service_title']}\n"
+        f"Client: {booking['client_name']}\n"
+        f"Provider: {booking['provider_name']}\n"
+        f"Date: {booking['slot_date']}\n"
+        f"Time: {str(booking['start_time'])[:5]} - {str(booking['end_time'])[:5]}"
+    )
+
+    # Generate QR as base64 PNG for embedding
+    qr = qrcode.QRCode(
+        version=1,
+        error_correction=qrcode.constants.ERROR_CORRECT_M,
+        box_size=8,
+        border=2,
+    )
+    qr.add_data(ticket_text)
+    qr.make(fit=True)
+    img = qr.make_image(fill_color="black", back_color="white")
+
+    buffer = io.BytesIO()
+    img.save(buffer, format="PNG")
+    qr_b64 = base64.b64encode(buffer.getvalue()).decode("ascii")
+
+    return render_template(
+        "bookings/ticket.html",
+        booking=booking,
+        qr_b64=qr_b64,
+        ticket_text=ticket_text,
+    )

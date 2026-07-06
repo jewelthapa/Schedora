@@ -47,6 +47,9 @@
             <p class="mb-card__price">Rs. {{ '%.2f'|format(b.price) }}</p>
           </div>
           <div class="mb-card__actions">
+            {% if b.status == 'accepted' %}
+              <a class="btn btn--solid" href="{{ url_for('booking.bookingTicket', booking_id=b.id) }}">View ticket</a>
+            {% endif %}
             {% if b.status in ['pending', 'accepted'] %}
               <form method="POST"
                     action="{{ url_for('booking.cancelBooking', booking_id=b.id) }}"

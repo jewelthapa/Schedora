@@ -24,6 +24,12 @@ def register_routes():
         methods=["POST"],
         endpoint="cancelBooking",
     )
+    booking_bp.add_url_rule(
+        "/<int:booking_id>/ticket",
+        view_func=bookingController.bookingTicket,
+        methods=["GET"],
+        endpoint="bookingTicket",
+    )
 
 
 register_routes()

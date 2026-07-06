@@ -2394,3 +2394,83 @@ section { padding: 96px 24px; }
   .fav-card { grid-template-columns: 1fr; }
   .fav-card__actions { align-self: flex-end; }
 }
+/* =====================================================================
+   BOOKING TICKET (QR)
+   ===================================================================== */
+
+.ticket {
+  max-width: 520px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.ticket__qr {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+  background: #ffffff;
+  border-radius: 16px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 16px -6px rgba(20, 58, 71, 0.15);
+}
+.ticket__qr img {
+  width: 240px;
+  height: 240px;
+  display: block;
+}
+
+.ticket__details {
+  text-align: left;
+  border-top: 2px dashed var(--line);
+  border-bottom: 2px dashed var(--line);
+  padding: 20px 0;
+  margin-bottom: 18px;
+}
+
+.ticket__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 4px;
+  gap: 16px;
+}
+.ticket__row:not(:last-child) {
+  border-bottom: 1px solid var(--line);
+}
+
+.ticket__label {
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.ticket__value {
+  font-family: var(--font-body);
+  color: var(--text-strong);
+  font-size: 0.94rem;
+  text-align: right;
+}
+
+.ticket__note {
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.5;
+  margin: 0 0 24px;
+  font-style: italic;
+}
+
+.ticket__actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+/* Clean print styles */
+@media print {
+  .dash-side, .dash-head, .ticket__actions, .nav { display: none !important; }
+  .dash-main { padding: 20px !important; }
+  .ticket { max-width: 100% !important; }
+}
