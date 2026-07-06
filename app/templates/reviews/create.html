@@ -1,0 +1,62 @@
+{% extends "dash_base.html" %}
+{% block title %}Leave a review · Schedora{% endblock %}
+
+{% set active = 'bookings' %}
+
+{% block dash_content %}
+<header class="dash-head">
+  <div>
+    <p class="dash-head__eyebrow">
+      <a href="{{ url_for('booking.myBookings') }}" class="detail-back">← Back to bookings</a>
+    </p>
+    <h1 class="dash-head__title">Leave a review</h1>
+    <p class="dash-head__sub">Share your experience with {{ booking.provider_name }}. Reviews help other clients choose.</p>
+  </div>
+</header>
+
+<section class="dash-section confirm-card">
+  <div class="confirm-row">
+    <span class="confirm-row__label">Service</span>
+    <span class="confirm-row__value">{{ booking.service_title }}</span>
+  </div>
+  <div class="confirm-row">
+    <span class="confirm-row__label">Provider</span>
+    <span class="confirm-row__value">{{ booking.provider_name }}</span>
+  </div>
+  <div class="confirm-row">
+    <span class="confirm-row__label">Date</span>
+    <span class="confirm-row__value">{{ booking.slot_date.strftime('%A, %d %B %Y') }}</span>
+  </div>
+
+  <form method="POST"
+        action="{{ url_for('review.createReview', booking_id=booking.id) }}"
+        class="profile-form" style="margin-top: 24px;">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+    <div class="pfield">
+      <label class="pfield__label">Rating</label>
+      <div class="star-picker">
+        {% for n in [1, 2, 3, 4, 5] %}
+          <label class="star-picker__opt">
+            <input type="radio" name="rating" value="{{ n }}"
+                   {% if rating == n %}checked{% endif %} required>
+            <span>{{ '★' * n }}{{ '☆' * (5 - n) }}</span>
+          </label>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="pfield">
+      <label class="pfield__label" for="comment">Comment (optional)</label>
+      <textarea class="pfield__input pfield__input--area" id="comment" name="comment"
+                rows="4" maxlength="500"
+                placeholder="What did you like? What could have been better?">{{ comment or '' }}</textarea>
+    </div>
+
+    <div class="profile-form__actions">
+      <a class="btn btn--ghost" href="{{ url_for('booking.myBookings') }}">Cancel</a>
+      <button type="submit" class="btn btn--solid">Submit review</button>
+    </div>
+  </form>
+</section>
+{% endblock %}

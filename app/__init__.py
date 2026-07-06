@@ -109,6 +109,9 @@ def create_app():
     from app.routes.incomingBookingRoutes import incoming_bp
     app.register_blueprint(incoming_bp)
 
+    from app.routes.reviewRoutes import review_bp
+    app.register_blueprint(review_bp)
+
     # ----------------------------------------------------------------
     # ERROR HANDLERS
     # ----------------------------------------------------------------

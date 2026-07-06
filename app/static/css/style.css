@@ -2215,3 +2215,92 @@ section { padding: 96px 24px; }
     min-width: 0;
   }
 }
+/* =====================================================================
+   REVIEWS
+   ===================================================================== */
+
+/* Star picker (create review) */
+.star-picker {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+.star-picker__opt { position: relative; cursor: pointer; }
+.star-picker__opt input { position: absolute; opacity: 0; pointer-events: none; }
+.star-picker__opt span {
+  display: block;
+  text-align: center;
+  padding: 12px 6px;
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  border: 1.4px solid var(--line);
+  border-radius: 10px;
+  background: var(--bg-field);
+  transition: all 0.15s ease;
+  user-select: none;
+}
+.star-picker__opt input:checked + span {
+  border-color: var(--teal);
+  background: var(--sage);
+  color: var(--teal-deep);
+}
+[data-theme="dark"] .star-picker__opt input:checked + span { color: var(--mint); }
+
+/* Reviews list (provider view) */
+.review-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.review-item {
+  padding: 18px 20px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--bg-surface);
+}
+.review-item__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+.review-item__head > div {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.review-item__stars {
+  font-size: 1rem;
+  letter-spacing: 0.06em;
+  color: #efb44a;
+}
+.review-item__meta {
+  font-size: 0.82rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.review-item__service {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--text-strong);
+  margin: 0 0 8px;
+  font-size: 0.98rem;
+}
+.review-item__comment {
+  color: var(--text);
+  font-size: 0.94rem;
+  line-height: 1.6;
+  margin: 0;
+}
+.review-item__nocomment {
+  color: var(--muted);
+  font-style: italic;
+  font-size: 0.88rem;
+  margin: 0;
+}

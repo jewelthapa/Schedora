@@ -1,3 +1,5 @@
+from datetime import date
+
 from flask import render_template, request, redirect, url_for, flash, g, abort
 
 from app.auth import login_required, role_required
@@ -109,6 +111,7 @@ def myBookings():
         "bookings/my_bookings.html",
         bookings=bookings,
         active_status=status_filter if status_filter in valid_statuses else "",
+        today=date.today(),
     )
 
 

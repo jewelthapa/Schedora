@@ -46,16 +46,19 @@
             </p>
             <p class="mb-card__price">Rs. {{ '%.2f'|format(b.price) }}</p>
           </div>
-          {% if b.status in ['pending', 'accepted'] %}
-            <div class="mb-card__actions">
+          <div class="mb-card__actions">
+            {% if b.status in ['pending', 'accepted'] %}
               <form method="POST"
                     action="{{ url_for('booking.cancelBooking', booking_id=b.id) }}"
                     onsubmit="return confirm('Cancel this booking? The slot will be freed for other clients.');">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                 <button type="submit" class="btn btn--ghost mb-cancel">Cancel booking</button>
               </form>
-            </div>
-          {% endif %}
+            {% endif %}
+            {% if b.status in ['accepted', 'completed'] and b.slot_date <= today %}
+              <a class="btn btn--outline" href="{{ url_for('review.createReview', booking_id=b.id) }}">Leave a review</a>
+            {% endif %}
+          </div>
         </li>
       {% endfor %}
     </ul>

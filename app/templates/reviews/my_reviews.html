@@ -1,0 +1,65 @@
+{% extends "dash_base.html" %}
+{% block title %}Reviews · Schedora{% endblock %}
+
+{% set active = 'reviews' %}
+
+{% block dash_content %}
+<header class="dash-head">
+  <div>
+    <p class="dash-head__eyebrow">Provider</p>
+    <h1 class="dash-head__title">Reviews</h1>
+    <p class="dash-head__sub">What clients have said about your services.</p>
+  </div>
+</header>
+
+{% if stats.total > 0 %}
+  <div class="dash-stats" style="grid-template-columns: repeat(2, 1fr);">
+    <div class="stat">
+      <span class="stat__label">Average rating</span>
+      <span class="stat__value">{{ stats.avg_rating }} <span style="font-size: 1rem; color: var(--muted);">/ 5</span></span>
+      <span class="stat__hint">
+        {% set rounded = stats.avg_rating|round(0, 'floor')|int %}
+        {{ '★' * rounded }}{{ '☆' * (5 - rounded) }}
+      </span>
+    </div>
+    <div class="stat">
+      <span class="stat__label">Total reviews</span>
+      <span class="stat__value">{{ stats.total }}</span>
+      <span class="stat__hint">From your clients</span>
+    </div>
+  </div>
+{% endif %}
+
+<section class="dash-section">
+  {% if reviews %}
+    <ul class="review-list">
+      {% for r in reviews %}
+        <li class="review-item">
+          <div class="review-item__head">
+            <div>
+              <span class="svc__cat svc__cat--{{ r.category|lower }}">{{ r.category }}</span>
+              <span class="review-item__stars">
+                {{ '★' * r.rating }}{{ '☆' * (5 - r.rating) }}
+              </span>
+            </div>
+            <span class="review-item__meta">
+              {{ r.client_name }} · {{ r.created_at.strftime('%d %b %Y') }}
+            </span>
+          </div>
+          <p class="review-item__service">{{ r.service_title }}</p>
+          {% if r.comment %}
+            <p class="review-item__comment">{{ r.comment }}</p>
+          {% else %}
+            <p class="review-item__nocomment">No written comment.</p>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <div class="empty">
+      <p class="empty__title">No reviews yet</p>
+      <p class="empty__text">Once clients complete appointments with you, they can leave reviews here.</p>
+    </div>
+  {% endif %}
+</section>
+{% endblock %}
