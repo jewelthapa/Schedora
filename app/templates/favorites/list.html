@@ -1,0 +1,58 @@
+{% extends "dash_base.html" %}
+{% block title %}Favourites · Schedora{% endblock %}
+
+{% set active = 'favorites' %}
+
+{% block dash_content %}
+<header class="dash-head">
+  <div>
+    <p class="dash-head__eyebrow">Client</p>
+    <h1 class="dash-head__title">Your favourites</h1>
+    <p class="dash-head__sub">Providers you've saved. Rebook them anytime.</p>
+  </div>
+</header>
+
+<section class="dash-section">
+  {% if favorites %}
+    <ul class="fav-list">
+      {% for f in favorites %}
+        <li class="fav-card">
+          <div class="fav-card__body">
+            <div class="fav-card__avatar">{{ f.name[0]|upper }}</div>
+            <div class="fav-card__info">
+              <h3 class="fav-card__name">{{ f.name }}</h3>
+              {% if f.bio %}
+                <p class="fav-card__bio">{{ f.bio|truncate(120, True, '...') }}</p>
+              {% endif %}
+              <div class="fav-card__meta">
+                <span>{{ f.service_count }} service{{ 's' if f.service_count != 1 else '' }}</span>
+                {% if f.review_count > 0 %}
+                  <span>·</span>
+                  <span>★ {{ f.avg_rating }} ({{ f.review_count }} review{{ 's' if f.review_count != 1 else '' }})</span>
+                {% endif %}
+                <span>·</span>
+                <span>Saved {{ f.saved_at.strftime('%d %b %Y') }}</span>
+              </div>
+            </div>
+          </div>
+          <div class="fav-card__actions">
+            <form method="POST"
+                  action="{{ url_for('favorite.toggleFavorite', provider_id=f.provider_id) }}"
+                  onsubmit="return confirm('Remove this provider from favourites?');">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+              <input type="hidden" name="next" value="{{ url_for('favorite.myFavorites') }}">
+              <button type="submit" class="btn btn--ghost fav-remove">Remove</button>
+            </form>
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <div class="empty">
+      <p class="empty__title">No favourites yet</p>
+      <p class="empty__text">Save providers from their service pages to quickly rebook them later.</p>
+      <a class="btn btn--solid" href="{{ url_for('browse.browse') }}">Browse services</a>
+    </div>
+  {% endif %}
+</section>
+{% endblock %}

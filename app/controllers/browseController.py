@@ -1,4 +1,4 @@
-from flask import render_template, request, abort
+from flask import render_template, request, abort, g
 
 from app.auth import login_required
 from app.database import get_connection
@@ -96,7 +96,18 @@ def serviceDetail(service_id):
                 (service_id,),
             )
             slots = cursor.fetchall()
+
+            # Is this provider already favorited by the current user?
+            is_favorited = False
+            if g.current_user and g.current_user.get("role") == "client":
+                cursor.execute(
+                    "SELECT 1 FROM favorites WHERE client_id = %s AND provider_id = %s",
+                    (g.current_user["id"], service["provider_id"]),
+                )
+                is_favorited = cursor.fetchone() is not None
     finally:
         conn.close()
 
-    return render_template("browse/detail.html", service=service, slots=slots)
+    return render_template("browse/detail.html",
+                           service=service, slots=slots,
+                           is_favorited=is_favorited)

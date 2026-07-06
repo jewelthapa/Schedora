@@ -112,6 +112,9 @@ def create_app():
     from app.routes.reviewRoutes import review_bp
     app.register_blueprint(review_bp)
 
+    from app.routes.favoriteRoutes import favorite_bp
+    app.register_blueprint(favorite_bp)
+
     # ----------------------------------------------------------------
     # ERROR HANDLERS
     # ----------------------------------------------------------------
