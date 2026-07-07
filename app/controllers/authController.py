@@ -1,5 +1,5 @@
 """
-Auth controller — register, login, logout.
+Auth controller — register, login (with 2FA), logout.
 Includes account lockout after repeated failed attempts.
 """
 
@@ -9,6 +9,8 @@ from flask import render_template, request, redirect, url_for, flash, session
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from app.database import get_connection
+from app.repository import otp_repo
+from app.utils.otp_send import send_otp_via_console
 
 
 # ------------------------- LOCKOUT CONFIG ---------------------------
@@ -81,7 +83,7 @@ def register():
 
 
 # ==========================================================================
-# LOGIN — with account lockout
+# LOGIN — with account lockout + 2FA branching
 # ==========================================================================
 def login():
     if request.method == "POST":
@@ -93,15 +95,14 @@ def login():
             with conn.cursor() as cursor:
                 cursor.execute(
                     """SELECT id, name, email, password, role,
-                              failed_attempts, locked_until
+                              failed_attempts, locked_until,
+                              two_factor_enabled
                        FROM users WHERE email = %s""",
                     (email,),
                 )
                 user = cursor.fetchone()
 
                 # --- Step 1: enumeration protection ---
-                # If user doesn't exist, return the same generic message
-                # (don't tell attackers which emails are valid)
                 if user is None:
                     flash("Invalid email or password.", "danger")
                     return render_template(
@@ -124,11 +125,9 @@ def login():
 
                 # --- Step 3: verify password ---
                 if not check_password_hash(user["password"], password):
-                    # Wrong password — increment failed attempts
                     new_attempts = (user["failed_attempts"] or 0) + 1
 
                     if new_attempts >= MAX_FAILED_ATTEMPTS:
-                        # Lock the account
                         lock_until = now + timedelta(minutes=LOCKOUT_DURATION_MIN)
                         cursor.execute(
                             """UPDATE users
@@ -143,7 +142,6 @@ def login():
                             "danger",
                         )
                     else:
-                        # Just increment and warn
                         cursor.execute(
                             "UPDATE users SET failed_attempts = %s WHERE id = %s",
                             (new_attempts, user["id"]),
@@ -161,7 +159,7 @@ def login():
                         "auth/auth.html", mode="login", email=email
                     )
 
-                # --- Step 4: successful login — reset counters ---
+                # --- Step 4: password OK — reset failure counters ---
                 cursor.execute(
                     """UPDATE users
                        SET failed_attempts = 0, locked_until = NULL
@@ -169,19 +167,124 @@ def login():
                     (user["id"],),
                 )
                 conn.commit()
-
-                # Set session
-                session.clear()
-                session["user_id"] = user["id"]
-                session["user_name"] = user["name"]
-                session["user_role"] = user["role"]
-
-                flash(f"Welcome back, {user['name']}.", "success")
-                return redirect(url_for("dashboard.dashboard"))
         finally:
             conn.close()
 
+        # --- Step 5: is 2FA enabled? ---
+        if user["two_factor_enabled"]:
+            # Don't log them in yet — put user_id in a pending slot
+            session.clear()
+            session["pending_user_id"] = user["id"]
+            session["pending_user_email"] = user["email"]
+            session["pending_user_name"] = user["name"]
+
+            # Generate + "send" the OTP
+            code = otp_repo.create_for_user(user["id"], purpose="login")
+            send_otp_via_console(user["email"], code)
+
+            flash("We've sent you a 6-digit code. Check your terminal (demo mode).",
+                  "success")
+            return redirect(url_for("auth.verifyOtp"))
+
+        # --- No 2FA: log them in directly ---
+        session.clear()
+        session["user_id"] = user["id"]
+        session["user_name"] = user["name"]
+        session["user_role"] = user["role"]
+
+        flash(f"Welcome back, {user['name']}.", "success")
+        return redirect(url_for("dashboard.dashboard"))
+
     return render_template("auth/auth.html", mode="login")
+
+
+# ==========================================================================
+# VERIFY OTP — second step of 2FA login
+# ==========================================================================
+def verifyOtp():
+    """The OTP entry page. Only accessible if login step 1 (password)
+    already succeeded — indicated by pending_user_id in session."""
+    pending_id = session.get("pending_user_id")
+    if not pending_id:
+        flash("Please log in first.", "warning")
+        return redirect(url_for("auth.login"))
+
+    if request.method == "POST":
+        code_attempt = request.form.get("code", "").strip()
+
+        if len(code_attempt) != 6 or not code_attempt.isdigit():
+            flash("Enter the 6-digit code you received.", "danger")
+            return render_template("auth/verify_otp.html",
+                                   email=session.get("pending_user_email"))
+
+        result = otp_repo.verify_and_consume(pending_id, code_attempt, purpose="login")
+
+        if result == "ok":
+            # Promote pending user to a real session
+            conn = get_connection()
+            try:
+                with conn.cursor() as cursor:
+                    cursor.execute(
+                        "SELECT id, name, role FROM users WHERE id = %s",
+                        (pending_id,),
+                    )
+                    user = cursor.fetchone()
+            finally:
+                conn.close()
+
+            if user is None:
+                session.clear()
+                flash("Your account could not be found.", "danger")
+                return redirect(url_for("auth.login"))
+
+            session.clear()
+            session["user_id"] = user["id"]
+            session["user_name"] = user["name"]
+            session["user_role"] = user["role"]
+
+            flash(f"Welcome back, {user['name']}.", "success")
+            return redirect(url_for("dashboard.dashboard"))
+
+        elif result == "expired":
+            flash("That code has expired. Please log in again.", "danger")
+            session.clear()
+            return redirect(url_for("auth.login"))
+
+        elif result == "exhausted":
+            flash("Too many wrong attempts. Please log in again.", "danger")
+            session.clear()
+            return redirect(url_for("auth.login"))
+
+        elif result == "missing":
+            flash("No active code. Please log in again.", "danger")
+            session.clear()
+            return redirect(url_for("auth.login"))
+
+        else:  # invalid
+            flash("Incorrect code. Try again.", "danger")
+            return render_template("auth/verify_otp.html",
+                                   email=session.get("pending_user_email"))
+
+    return render_template("auth/verify_otp.html",
+                           email=session.get("pending_user_email"))
+
+
+# ==========================================================================
+# RESEND OTP
+# ==========================================================================
+def resendOtp():
+    """Re-issue a fresh OTP for the pending user."""
+    pending_id = session.get("pending_user_id")
+    if not pending_id:
+        flash("Please log in first.", "warning")
+        return redirect(url_for("auth.login"))
+
+    email = session.get("pending_user_email")
+    code = otp_repo.create_for_user(pending_id, purpose="login")
+    send_otp_via_console(email, code)
+
+    flash("A new code has been sent.", "success")
+    return redirect(url_for("auth.verifyOtp"))
 
 
 # ==========================================================================

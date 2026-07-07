@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Verify code · Schedora{% endblock %}
+
+{% block content %}
+<section class="auth-wrap">
+  <div class="otp-card">
+    <div class="otp-card__brand">
+      <span class="dash-side__brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="4" width="18" height="17" rx="4"/>
+          <line x1="3" y1="9" x2="21" y2="9"/>
+          <line x1="8" y1="2" x2="8" y2="6"/>
+          <line x1="16" y1="2" x2="16" y2="6"/>
+        </svg>
+      </span>
+      <span class="otp-card__brand-name">Schedora</span>
+    </div>
+
+    <h1 class="otp-card__title">Verify it's you</h1>
+    <p class="otp-card__sub">
+      Enter the 6-digit code we sent to
+      {% if email %}<strong>{{ email }}</strong>{% else %}your email{% endif %}.
+    </p>
+
+    <form method="POST" action="{{ url_for('auth.verifyOtp') }}" class="otp-form">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <input class="otp-input" type="text" name="code"
+             inputmode="numeric" pattern="[0-9]{6}" maxlength="6"
+             placeholder="000000" autocomplete="one-time-code"
+             required autofocus>
+      <button type="submit" class="btn btn--solid btn--lg otp-submit">Verify</button>
+    </form>
+
+    <form method="POST" action="{{ url_for('auth.resendOtp') }}" class="otp-resend">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <button type="submit" class="otp-resend__btn">Didn't get it? Resend code</button>
+    </form>
+
+    <p class="otp-card__note">
+      Demo mode: check your terminal to see the code.
+    </p>
+  </div>
+</section>
+{% endblock %}

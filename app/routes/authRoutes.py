@@ -28,4 +28,16 @@ def register_routes():
         view_func=authController.logout,
         methods=["GET"],
     )
+    auth_bp.add_url_rule(
+        "/verify-otp",
+        view_func=authController.verifyOtp,
+        methods=["GET", "POST"],
+        endpoint="verifyOtp",
+    )
+    auth_bp.add_url_rule(
+        "/resend-otp",
+        view_func=authController.resendOtp,
+        methods=["POST"],
+        endpoint="resendOtp",
+    )
 register_routes()
