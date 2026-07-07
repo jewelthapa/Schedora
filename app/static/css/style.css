@@ -2474,3 +2474,33 @@ section { padding: 96px 24px; }
   .dash-main { padding: 20px !important; }
   .ticket { max-width: 100% !important; }
 }
+/* =====================================================================
+   TWO-FACTOR TOGGLE (Profile edit)
+   ===================================================================== */
+
+.switch-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  cursor: pointer;
+}
+.switch-row input[type="checkbox"] {
+  margin-top: 4px;
+  width: 18px;
+  height: 18px;
+  accent-color: var(--teal);
+  cursor: pointer;
+}
+.switch-row__label {
+  font-family: var(--font-body);
+  color: var(--text-strong);
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+.switch-row__label small {
+  display: block;
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 400;
+  margin-top: 4px;
+}

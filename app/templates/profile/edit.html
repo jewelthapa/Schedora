@@ -44,6 +44,18 @@
       <h3 class="pfield-group__title">Change password</h3>
       <p class="pfield-group__hint">Leave the new password blank to keep your current one.</p>
 
+    <div class="pfield-group">
+  <h3 class="pfield-group__title">Security</h3>
+  <label class="switch-row">
+    <input type="checkbox" name="two_factor_enabled"
+           {% if user.two_factor_enabled %}checked{% endif %}>
+    <span class="switch-row__label">
+      Enable two-factor authentication
+      <small>Get a 6-digit code by email each time you log in.</small>
+    </span>
+  </label>
+</div>
+
       <div class="pfield">
         <label class="pfield__label" for="new_password">New password</label>
         <input class="pfield__input" id="new_password" name="new_password"

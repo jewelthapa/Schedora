@@ -12,7 +12,8 @@ def profile():
     try:
         with conn.cursor() as cursor:
             cursor.execute(
-                """SELECT id, name, email, role, phone, bio, created_at
+                """SELECT id, name, email, role, phone, bio, created_at,
+                          two_factor_enabled
                    FROM users WHERE id = %s""",
                 (g.current_user["id"],),
             )
@@ -32,8 +33,8 @@ def profile():
 @login_required
 def editProfile():
     """Update the logged-in user's profile (name, email, phone, bio,
-    optional password change). Requires the current password to
-    confirm any change — small but real security measure."""
+    two-factor auth toggle, optional password change). Requires the
+    current password to confirm any change — small but real security measure."""
     user_id = g.current_user["id"]
 
     if request.method == "POST":
@@ -43,6 +44,7 @@ def editProfile():
         bio = request.form.get("bio", "").strip()
         current_password = request.form.get("current_password", "")
         new_password = request.form.get("new_password", "")
+        two_factor_enabled = 1 if request.form.get("two_factor_enabled") == "on" else 0
 
         # --- Basic validation ---
         errors = []
@@ -86,7 +88,8 @@ def editProfile():
                         flash(e, "danger")
                     # Reload the fresh user to re-render the form
                     cursor.execute(
-                        """SELECT id, name, email, role, phone, bio, created_at
+                        """SELECT id, name, email, role, phone, bio, created_at,
+                                  two_factor_enabled
                            FROM users WHERE id = %s""",
                         (user_id,),
                     )
@@ -95,6 +98,7 @@ def editProfile():
                     user_fresh.update({
                         "name": name, "email": email,
                         "phone": phone, "bio": bio,
+                        "two_factor_enabled": two_factor_enabled,
                     })
                     return render_template("profile/edit.html", user=user_fresh)
 
@@ -103,16 +107,20 @@ def editProfile():
                     hashed = generate_password_hash(new_password)
                     cursor.execute(
                         """UPDATE users
-                           SET name = %s, email = %s, phone = %s, bio = %s, password = %s
+                           SET name = %s, email = %s, phone = %s, bio = %s,
+                               password = %s, two_factor_enabled = %s
                            WHERE id = %s""",
-                        (name, email, phone, bio, hashed, user_id),
+                        (name, email, phone, bio, hashed,
+                         two_factor_enabled, user_id),
                     )
                 else:
                     cursor.execute(
                         """UPDATE users
-                           SET name = %s, email = %s, phone = %s, bio = %s
+                           SET name = %s, email = %s, phone = %s, bio = %s,
+                               two_factor_enabled = %s
                            WHERE id = %s""",
-                        (name, email, phone, bio, user_id),
+                        (name, email, phone, bio,
+                         two_factor_enabled, user_id),
                     )
                 conn.commit()
 
@@ -129,7 +137,8 @@ def editProfile():
     try:
         with conn.cursor() as cursor:
             cursor.execute(
-                """SELECT id, name, email, role, phone, bio, created_at
+                """SELECT id, name, email, role, phone, bio, created_at,
+                          two_factor_enabled
                    FROM users WHERE id = %s""",
                 (user_id,),
             )
