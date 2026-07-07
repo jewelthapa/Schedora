@@ -29,3 +29,27 @@
     btn.setAttribute("aria-label", theme === "dark" ? "Switch to light mode" : "Switch to dark mode");
   }
 })();
+
+/* =========================================================
+   Sidebar collapse (dashboard pages only)
+   ========================================================= */
+(function () {
+  // Apply saved sidebar state immediately, before the DOM finishes
+  // rendering, so there's no flash of the expanded state
+  const savedCollapsed = localStorage.getItem("schedora-sidebar") === "collapsed";
+  document.addEventListener("DOMContentLoaded", function () {
+    const shell = document.querySelector(".dash-shell");
+    if (!shell) return;
+
+    if (savedCollapsed) shell.classList.add("collapsed");
+
+    const toggle = document.getElementById("sidebarToggle");
+    if (!toggle) return;
+
+    toggle.addEventListener("click", function () {
+      shell.classList.toggle("collapsed");
+      const isCollapsed = shell.classList.contains("collapsed");
+      localStorage.setItem("schedora-sidebar", isCollapsed ? "collapsed" : "expanded");
+    });
+  });
+})();

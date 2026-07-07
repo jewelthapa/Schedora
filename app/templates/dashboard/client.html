@@ -41,10 +41,10 @@
     <ul class="activity">
       {% for b in recent_bookings %}
         <li class="activity__row">
-          <span class="activity__dot activity__dot--{{ b.status }}"></span>
+          <span class="status-dot status-dot--{{ b.status }}"></span>
           <span class="activity__main">{{ b.service_title }} <span class="activity__meta">with {{ b.provider_name }}</span></span>
           <span class="activity__side">{{ b.slot_date }} · {{ b.start_time }}</span>
-          <span class="activity__status">{{ b.status }}</span>
+          <span class="status-pill status-pill--{{ b.status }}">{{ b.status }}</span>
         </li>
       {% endfor %}
     </ul>
