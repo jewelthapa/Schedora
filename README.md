@@ -6,6 +6,24 @@ Schedora is a full-stack appointment booking web application built with Flask, M
 
 ---
 
+---
+
+## Screenshots
+
+<!-- Add screenshots here before submission. Suggested screens: -->
+<!-- 1. Landing page / hero -->
+<!-- 2. Login (light + dark mode) -->
+<!-- 3. Client dashboard -->
+<!-- 4. Browse services with category filters -->
+<!-- 5. Service detail with slots -->
+<!-- 6. Booking confirmation -->
+<!-- 7. Provider Bookings (Accept/Reject) -->
+<!-- 8. QR ticket -->
+<!-- 9. Reviews page -->
+<!-- 10. 2FA OTP entry -->
+
+*Screenshots will be added during final documentation pass.*
+
 ## Features
 
 ### For clients
@@ -202,6 +220,36 @@ Eight main tables with proper foreign key relationships and cascading deletes:
 - **otp_codes** — time-limited codes for 2FA verification
 
 All destructive operations use `ON DELETE CASCADE` so removing a user cleanly removes their related data.
+
+---
+
+## Security highlights
+
+Schedora implements defense-in-depth across multiple layers:
+
+### Authentication
+- **Cryptographic password hashing** with Werkzeug's `scrypt` (per-user salt, computationally expensive to brute-force)
+- **Account lockout** after 5 failed login attempts, with a 15-minute cooldown
+- **Enumeration protection** — nonexistent emails and wrong passwords return identical error messages, preventing attackers from harvesting valid accounts
+- **Two-factor authentication** via time-limited email OTP (6 digits, 5-minute expiry, single-use, cryptographically random via Python's `secrets` module)
+- **OTP brute-force protection** — codes are invalidated after 3 wrong attempts
+
+### Session security
+- **Server-side sessions** with cryptographic signing (Flask's built-in session store)
+- **Sliding session expiry** — sessions expire after 30 minutes of inactivity
+- **Session invalidation** on logout via `session.clear()`
+- **Pending vs. authenticated states** — 2FA users have `pending_user_id` between password entry and OTP verification, not `user_id`, so unfinished logins can't access protected pages
+
+### Request-level security
+- **CSRF protection** — every state-changing form includes a per-session token, verified server-side
+- **Parameterized SQL queries** everywhere — no string concatenation, so SQL injection is prevented at the driver level
+- **Role-based access control** via `@login_required` and `@role_required(...)` decorators on every controller
+
+### Data integrity
+- **Atomic transactions** for multi-step operations (e.g. booking creation locks the slot in the same transaction, rollback on failure)
+- **Ownership checks** on all edit/delete operations — users can only modify their own resources (prevents Insecure Direct Object Reference attacks)
+- **Whitelist validation** on constrained inputs (categories, roles, status values) — invalid values are rejected before hitting the database
+- **Optimistic locking** on slot booking — checks `is_booked` before insert to prevent double-booking race conditions
 
 ## Two-factor authentication (demo mode)
 
