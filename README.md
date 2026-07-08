@@ -113,6 +113,96 @@ The database seeds ~45 additional provider accounts for realistic browsing. Thes
 
 ---
 
+## Project structure
+
+Schedora follows a layered MVC-style architecture with clear separation between routes, controllers, repositories, and templates.
+
+Schedora/
+├── run.py                       # Application entry point
+├── config.py                    # Configuration loader (reads .env)
+├── schema.sql                   # Database schema (all tables + relationships)
+├── requirements.txt             # Python dependencies
+├── .env.example                 # Environment variable template
+├── .gitignore
+├── README.md
+│
+└── app/
+├── init.py              # Flask app factory (create_app)
+├── auth.py                  # login_required + role_required decorators
+├── database.py              # PyMySQL connection helper
+│
+├── controllers/             # Request handlers (business logic)
+│   ├── authController.py         # Register, login, logout, OTP
+│   ├── dashboardController.py    # Role-aware dashboards
+│   ├── profileController.py      # View + edit profile
+│   ├── notificationController.py # CRUD for notifications
+│   ├── serviceController.py      # Provider services CRUD
+│   ├── slotController.py         # Provider time slots CRUD
+│   ├── browseController.py       # Browse + service detail
+│   ├── bookingController.py      # Client bookings + QR ticket
+│   ├── incomingBookingController.py # Provider accept/reject
+│   ├── reviewController.py       # Reviews
+│   ├── favoriteController.py     # Favorites
+│   └── helpController.py         # Static help page
+│
+├── routes/                  # URL to controller wiring
+│   └── *Routes.py           # One file per feature blueprint
+│
+├── repository/              # DB access layer
+│   ├── otp_repo.py               # OTP generation + verification
+│   ├── notification_repo.py      # Notification helpers
+│   ├── user_repo.py
+│   └── booking_repo.py
+│
+├── utils/                   # Utility modules
+│   └── otp_send.py               # OTP delivery (console for demo)
+│
+├── templates/               # Jinja2 templates
+│   ├── base.html
+│   ├── dash_base.html
+│   ├── home.html
+│   ├── auth/                     # Login, register, OTP entry
+│   ├── dashboard/                # Client + provider dashboards
+│   ├── profile/                  # View + edit
+│   ├── notifications/            # Notification list
+│   ├── services/                 # My services + form
+│   ├── slots/                    # Availability + form
+│   ├── browse/                   # Browse + service detail
+│   ├── bookings/                 # Booking flows + ticket
+│   ├── reviews/                  # Create + provider view
+│   ├── favorites/                # Saved providers
+│   ├── help/                     # FAQ
+│   ├── partials/                 # Nav
+│   └── errors/                   # 403 / 404 / 500
+│
+└── static/
+├── css/style.css        # Custom design system
+└── js/main.js           # Theme toggle + sidebar collapse
+
+### Architecture overview
+
+- **`run.py`** boots the Flask app using the factory pattern from `app/__init__.py`.
+- **`__init__.py`** wires up sessions, CSRF, blueprint registration, and context processors (e.g. injecting `current_user` and unread notification count into every template).
+- **Blueprints** in `app/routes/` register URL patterns and map them to controller functions. Each feature gets its own blueprint (e.g. `booking_bp`, `review_bp`) for clean separation.
+- **Controllers** in `app/controllers/` contain the request/response logic — validation, session handling, redirects, flash messages.
+- **Repositories** in `app/repository/` handle direct database access with parameterized queries. Reusable helpers keep controllers thin.
+- **Templates** extend two base layouts: `base.html` (public pages) and `dash_base.html` (logged-in dashboard shell with sidebar and role-aware navigation).
+
+### Database schema
+
+Eight main tables with proper foreign key relationships and cascading deletes:
+
+- **users** — accounts (client or provider role), auth fields, 2FA toggle, lockout counters
+- **services** — provider service listings with category and price
+- **time_slots** — provider availability with overlap prevention
+- **bookings** — client-to-provider bookings with status lifecycle (pending → accepted/rejected/cancelled/completed)
+- **reviews** — one review per booking, 1–5 star rating with optional comment
+- **favorites** — clients save providers (unique constraint prevents duplicates)
+- **notifications** — cross-user notifications from booking events
+- **otp_codes** — time-limited codes for 2FA verification
+
+All destructive operations use `ON DELETE CASCADE` so removing a user cleanly removes their related data.
+
 ## Two-factor authentication (demo mode)
 
 2FA can be enabled per user from the Profile > Edit page. In demo mode, OTP codes are printed to the terminal instead of being sent by email. In production, the `send_otp_via_console` function in `app/utils/otp_send.py` would be replaced with an SMTP call.
