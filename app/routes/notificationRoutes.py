@@ -30,12 +30,5 @@ def register_routes():
         methods=["POST"],
         endpoint="deleteOne",
     )
-    notification_bp.add_url_rule(
-        "/test",
-        view_func=notificationController.createTest,
-        methods=["GET"],
-        endpoint="createTest",
-    )
-
 
 register_routes()

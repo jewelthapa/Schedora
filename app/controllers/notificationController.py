@@ -58,20 +58,6 @@ def deleteOne(notification_id):
     flash("Notification deleted.", "success")
     return redirect(url_for("notification.notifications"))
 
-
-@login_required
-def createTest():
-    """Dev helper: create a fake notification so we can see the flow work
-    before bookings exist. Remove this route before production."""
-    notification_repo.create(
-        g.current_user["id"],
-        "This is a test notification.",
-        "info",
-    )
-    flash("Test notification created.", "success")
-    return redirect(url_for("notification.notifications"))
-
-
 def _update_one(notification_id, user_id, set_read):
     """Safely update a notification only if it belongs to the caller."""
     conn = get_connection()
