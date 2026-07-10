@@ -13,22 +13,22 @@
 </header>
 
 <div class="dash-stats">
-  <div class="stat">
+  <div class="stat stat--violet">
     <span class="stat__label">Upcoming</span>
     <span class="stat__value">{{ stats.upcoming|default(0) }}</span>
     <span class="stat__hint">Confirmed bookings</span>
   </div>
-  <div class="stat">
+  <div class="stat stat--amber">
     <span class="stat__label">Pending</span>
     <span class="stat__value">{{ stats.pending|default(0) }}</span>
     <span class="stat__hint">Awaiting provider response</span>
   </div>
-  <div class="stat">
+  <div class="stat stat--slate">
     <span class="stat__label">Completed</span>
     <span class="stat__value">{{ stats.completed|default(0) }}</span>
     <span class="stat__hint">Past appointments</span>
   </div>
-  <div class="stat">
+  <div class="stat stat--rose">
     <span class="stat__label">Favourites</span>
     <span class="stat__value">{{ stats.favorites|default(0) }}</span>
     <span class="stat__hint">Saved providers</span>
@@ -52,7 +52,7 @@
     <div class="empty">
       <p class="empty__title">No bookings yet</p>
       <p class="empty__text">Browse services to make your first appointment.</p>
-      <a class="btn btn--solid" href="#">Browse services</a>
+      <a class="btn btn--solid" href="{{ url_for('browse.browse') }}">Browse services</a>
     </div>
   {% endif %}
 </section>

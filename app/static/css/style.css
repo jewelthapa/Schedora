@@ -971,14 +971,39 @@ section { padding: 96px 24px; }
 .stat {
   background: var(--bg-surface);
   border: 1px solid var(--line);
+  border-left: 3px solid var(--line);
   border-radius: 16px;
   padding: 18px 20px;
   display: flex;
   flex-direction: column;
   gap: 4px;
-  transition: border-color 0.2s ease, transform 0.15s ease;
+  transition: border-color 0.2s ease, transform 0.15s ease, background-color 0.2s ease;
 }
 .stat:hover { border-color: var(--mint); transform: translateY(-2px); }
+
+/* Colored variants: accent bar + soft tint + colored number.
+   Each sets --stat-accent; the shared rules use it. */
+.stat--violet { --stat-accent: #7E5BC4; }
+.stat--amber  { --stat-accent: #D99323; }
+.stat--slate  { --stat-accent: #6B7A8D; }
+.stat--rose   { --stat-accent: #DB5C8E; }
+.stat--teal   { --stat-accent: var(--teal); }
+.stat--sage   { --stat-accent: #3FA45C; }
+
+.stat--violet, .stat--amber, .stat--slate,
+.stat--rose, .stat--teal, .stat--sage {
+  border-left-color: var(--stat-accent);
+  background-color: color-mix(in srgb, var(--stat-accent) 10%, var(--bg-surface));
+}
+.stat--violet .stat__value, .stat--amber .stat__value,
+.stat--slate .stat__value,  .stat--rose .stat__value,
+.stat--teal .stat__value,   .stat--sage .stat__value {
+  color: var(--stat-accent);
+}
+.stat--violet:hover, .stat--amber:hover, .stat--slate:hover,
+.stat--rose:hover, .stat--teal:hover, .stat--sage:hover {
+  border-color: var(--stat-accent);
+}
 .stat__label {
   font-family: var(--font-display);
   font-size: 0.74rem;
