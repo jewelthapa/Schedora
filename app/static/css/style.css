@@ -2500,3 +2500,30 @@ section { padding: 96px 24px; }
   border-top: 1px solid var(--line);
   margin: 0;
 }
+/* ---------- Error pages (403 / 404 / 500) ---------- */
+.err {
+  min-height: 62vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 60px 24px;
+}
+.err__code {
+  font-family: var(--font-display);
+  font-size: clamp(76px, 14vw, 150px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--teal);
+}
+.err__title {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--text-strong);
+  margin: 14px 0 8px;
+}
+.err__text { color: var(--muted); max-width: 440px; line-height: 1.6; margin-bottom: 28px; }
+.err__actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }

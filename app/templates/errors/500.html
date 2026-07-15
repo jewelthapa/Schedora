@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Something went wrong · Schedora{% endblock %}
+{% block content %}
+<section class="err">
+  <div class="err__code">500</div>
+  <h1 class="err__title">Something went wrong</h1>
+  <p class="err__text">An unexpected error occurred on our end. Please try again in a moment.</p>
+  <div class="err__actions">
+    <a class="btn btn--solid" href="{{ url_for('home') }}">Back to home</a>
+  </div>
+</section>
+{% endblock %}
