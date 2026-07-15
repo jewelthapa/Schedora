@@ -17,13 +17,13 @@
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
 
     <div class="pfield">
-      <label class="pfield__label" for="name">Full name</label>
+      <label class="pfield__label" for="name">Full name <span class="req-star">*</span></label>
       <input class="pfield__input" id="name" name="name" type="text"
              value="{{ user.name }}" required>
     </div>
 
     <div class="pfield">
-      <label class="pfield__label" for="email">Email address</label>
+      <label class="pfield__label" for="email">Email address <span class="req-star">*</span></label>
       <input class="pfield__input" id="email" name="email" type="email"
              value="{{ user.email }}" required>
     </div>
@@ -65,7 +65,7 @@
 
     <div class="pfield">
       <label class="pfield__label" for="current_password">
-        Current password <span class="pfield__req">(required to save changes)</span>
+        Current password <span class="req-star">*</span> <span class="pfield__req">(required to save changes)</span>
       </label>
       <input class="pfield__input" id="current_password" name="current_password"
              type="password" required>
