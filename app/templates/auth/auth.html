@@ -15,9 +15,10 @@
         <p class="auth-sub">Welcome back to Schedora.</p>
 
         <input class="auth-input" type="email" name="email"
-               placeholder="Email address" value="{{ email or '' }}" required>
+               placeholder="Email address" value="{{ email or '' }}"
+               maxlength="120" required>
         <input class="auth-input" type="password" name="password"
-               placeholder="Password" required>
+               placeholder="Password" maxlength="128" required>
 
         <button type="submit" class="auth-submit">Log in</button>
       </form>
@@ -31,11 +32,19 @@
         <p class="auth-sub">Join Schedora as a client or provider.</p>
 
         <input class="auth-input" type="text" name="name"
-               placeholder="Full name" value="{{ name or '' }}" required>
+               placeholder="Full name" value="{{ name or '' }}"
+               maxlength="60" required>
         <input class="auth-input" type="email" name="email"
-               placeholder="Email address" value="{{ email or '' }}" required>
-        <input class="auth-input" type="password" name="password"
-               placeholder="Password (6+ characters)" minlength="6" required>
+               placeholder="Email address" value="{{ email or '' }}"
+               maxlength="120" required>
+        <input class="auth-input" type="password" name="password" id="signupPassword"
+               placeholder="Password (6–12 characters)"
+               minlength="6" maxlength="12" required>
+
+        <div class="pw-meter" id="pwMeter" aria-hidden="true">
+          <span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <p class="pw-hint" id="pwHint">Use 6–12 characters with a mix of uppercase, lowercase, number &amp; symbol.</p>
 
         <div class="auth-role">
           <label class="auth-role__opt">
@@ -87,6 +96,29 @@
     var inb = document.getElementById('goSignIn');
     if (up) up.addEventListener('click', function () { c.classList.add('right-active'); });
     if (inb) inb.addEventListener('click', function () { c.classList.remove('right-active'); });
+
+    var pw = document.getElementById('signupPassword');
+    var meter = document.getElementById('pwMeter');
+    var hint = document.getElementById('pwHint');
+    if (pw && meter && hint) {
+      pw.addEventListener('input', function () {
+        var v = pw.value;
+        var score = 0;
+        if (v.length >= 6 && v.length <= 12) score++;
+        if (/[A-Z]/.test(v)) score++;
+        if (/[a-z]/.test(v)) score++;
+        if (/[0-9]/.test(v)) score++;
+        if (/[^A-Za-z0-9]/.test(v)) score++;
+        meter.setAttribute('data-score', v ? score : 0);
+        if (score === 5) {
+          hint.textContent = 'Strong password — you\u2019re good to go.';
+          hint.classList.add('ok');
+        } else {
+          hint.textContent = 'Use 6\u201312 characters with a mix of uppercase, lowercase, number & symbol.';
+          hint.classList.remove('ok');
+        }
+      });
+    }
   })();
 </script>
 {% endblock %}

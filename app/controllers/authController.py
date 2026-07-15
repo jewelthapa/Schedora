@@ -29,26 +29,33 @@ def register():
         role = request.form.get("role", "").strip()
 
         # --- validation ---
+        import re
         errors = []
         if len(name) < 2:
             errors.append("Name must be at least 2 characters.")
+        if len(name) > 60:
+            errors.append("Name must be 60 characters or fewer.")
+
+        # Email: format + length cap
         if "@" not in email or "." not in email:
             errors.append("Please enter a valid email address.")
-        if len(password) < 6:
-            errors.append("Password must be at least 6 characters.")
+        elif len(email) > 120:
+            errors.append("Email must be 120 characters or fewer.")
+
+        # Password: length window + complexity
+        if len(password) < 6 or len(password) > 12:
+            errors.append("Password must be between 6 and 12 characters.")
+        if not re.search(r"[A-Z]", password):
+            errors.append("Password must include at least one uppercase letter.")
+        if not re.search(r"[a-z]", password):
+            errors.append("Password must include at least one lowercase letter.")
+        if not re.search(r"[0-9]", password):
+            errors.append("Password must include at least one number.")
+        if not re.search(r"[^A-Za-z0-9]", password):
+            errors.append("Password must include at least one symbol.")
+
         if role not in ("client", "provider"):
             errors.append("Please choose a role.")
-
-        if errors:
-            for e in errors:
-                flash(e, "danger")
-            return render_template(
-                "auth/auth.html",
-                mode="register",
-                name=name,
-                email=email,
-                role=role,
-            )
 
         # --- Check email uniqueness ---
         conn = get_connection()

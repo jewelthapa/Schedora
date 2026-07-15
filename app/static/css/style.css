@@ -678,6 +678,21 @@ section { padding: 96px 24px; }
 }
 .auth-ghost:hover { background: #FAFBF7; color: var(--text-strong); }
 
+/* Password strength meter (sign-up) */
+.pw-meter { display: flex; gap: 5px; margin: 2px 2px 6px; }
+.pw-meter span {
+  flex: 1; height: 4px; border-radius: 999px;
+  background: var(--line); transition: background .25s ease;
+}
+.pw-meter[data-score="1"] span:nth-child(-n+1),
+.pw-meter[data-score="2"] span:nth-child(-n+2) { background: #E5533C; }
+.pw-meter[data-score="3"] span:nth-child(-n+3) { background: #E0A93C; }
+.pw-meter[data-score="4"] span:nth-child(-n+4) { background: #6DBE5E; }
+.pw-meter[data-score="5"] span { background: #16A085; }
+.pw-hint { font-size: 0.72rem; color: var(--muted); text-align: left; margin: 0 2px 2px; line-height: 1.4; transition: color .2s ease; }
+.pw-hint.ok { color: #157a5b; }
+[data-theme="dark"] .pw-hint.ok { color: #6dd1a8; }
+
 @media (max-width: 720px) {
   .auth-container { max-width: 420px; min-height: auto; }
   .auth-form-box { width: 100%; position: relative; opacity: 1 !important; transform: none !important; }
