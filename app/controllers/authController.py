@@ -22,6 +22,8 @@ LOCKOUT_DURATION_MIN = 15   # Lock duration in minutes
 # REGISTER
 # ==========================================================================
 def register():
+    if session.get("user_id"):
+        return redirect(url_for("dashboard.dashboard"))
     if request.method == "POST":
         name = request.form.get("name", "").strip()
         email = request.form.get("email", "").strip().lower()
@@ -93,6 +95,8 @@ def register():
 # LOGIN — with account lockout + 2FA branching
 # ==========================================================================
 def login():
+    if session.get("user_id"):
+        return redirect(url_for("dashboard.dashboard"))
     if request.method == "POST":
         email = request.form.get("email", "").strip().lower()
         password = request.form.get("password", "")
