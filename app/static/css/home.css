@@ -406,3 +406,4 @@ footer p, footer a { color: var(--ink); opacity: 0.8; }
   .footer-grid { grid-template-columns: 1fr; gap: 32px; }
   .footer-bottom { flex-direction: column; gap: 20px; text-align: center; }
 }
+.nav-hello { font-size: 14px; font-weight: 600; color: var(--ink); white-space: nowrap; }
